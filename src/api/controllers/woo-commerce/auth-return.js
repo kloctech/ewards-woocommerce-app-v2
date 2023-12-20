@@ -11,9 +11,10 @@ export default async (req, res) => {
       .catch((err) => {
         return res.status(500).json(errorHelper('00041', req, err.message));
       }); 
-    logger('00002', woo_commerce._id , getText('en', '00007'), 'Info', req);
+    logger('00007', woo_commerce._id , getText('en', '00007'), 'Info', req,"WooCommerce");
     res.redirect(store_url+'/wp-admin/admin.php?page=ewards-settings')
   } else {
+    logger('00008', 400 , getText('en', '00008'), 'Info', req,"WooCommerce");
     res.send({ access: "Denied", success: success });
   }
 };

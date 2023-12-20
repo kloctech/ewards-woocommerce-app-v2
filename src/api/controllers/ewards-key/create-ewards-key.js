@@ -21,6 +21,7 @@ export default async (req, res) => {
     ewardsKey = await ewardsKey.save().catch((err) => {
       return res.status(500).json(errorHelper('00014', req, err.message));
     });
+  logger('00014', ewardsKey._id, getText('en', '00014'), 'Info', req,"ewardsMerchantId");
   return res.status(200).json({
     resultMessage: { en: getText('en', '00014') },
     resultCode: '00014', ewardsKey

@@ -68,8 +68,9 @@ export default {
   "00008": "Store failed redirect to ewards admin.",
   "00010": "Please provide a Valid WooCommerce premission keys",
   "00011": "WooCommerce store Veification.",
-  "00012": "Store not installed",
-  "00013": "Store installed",
-  "00014": "Successfully created EwardsKey",
-  "00015": "Successfully updated EwardsKey"
+  "00012": "Store not installed.",
+  "00013": "Store installed.",
+  "00014": "Successfully created EwardsKey.",
+  "00015": "Successfully updated EwardsKey.",
+  "00016": "MerchantId dosent match with store url."
 };

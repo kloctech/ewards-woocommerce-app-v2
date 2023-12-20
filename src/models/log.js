@@ -8,11 +8,12 @@ const { Schema, model } = mongoose;
     using logs to have some statistics about app/users, storing in DB is more efficient. */
 
 const logSchema = new Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId },
+  modelId: { type: mongoose.Schema.Types.ObjectId },
   resultCode: { type: String, required: true },
   level: { type: String, required: true },
   errorMessage: { type: String, required: true },
-  ip: { type: String, required: true }
+  ip: { type: String, required: true },
+  model:{type: String, required: true }
 },
   {
     timestamps: true
