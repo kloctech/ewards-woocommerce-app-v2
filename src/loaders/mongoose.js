@@ -4,7 +4,7 @@ import { dbUri } from '../config/index.js';
 
 export default async () => {
   mongoose.set("strictQuery", false);
-  await mongoose.connect(dbUri,{})
+  await mongoose.connect(dbUri,{useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
       console.log('Mongodb Connection');
     })
