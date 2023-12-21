@@ -5,7 +5,7 @@ import { errorHelper } from '../../utils/index.js';
 
 
 mongoose.set("strictQuery", false);
-const mongoConn = mongoose.createConnection(dbUri, {useNewUrlParser: true});
+const mongoConn = mongoose.createConnection(dbUri, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const opts = {
   storeClient: mongoConn,
