@@ -4,9 +4,9 @@ import { dbUri } from '../../config/index.js';
 import { errorHelper } from '../../utils/index.js';
 import { config } from 'dotenv';
 config();
-const { DB_URL } = process.env
+const { MONGODB_URL } = process.env
 mongoose.set("strictQuery", false);
-const mongoConn = mongoose.createConnection(DB_URL, {useNewUrlParser: true, useUnifiedTopology: true});
+const mongoConn = mongoose.createConnection(MONGODB_URL, {});
 
 const opts = {
   storeClient: mongoConn,
