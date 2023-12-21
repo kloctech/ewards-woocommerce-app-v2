@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-
+import { config } from 'dotenv';
+config();
 import { dbUri } from '../config/index.js';
 
 const { MONGODB_URL } = process.env

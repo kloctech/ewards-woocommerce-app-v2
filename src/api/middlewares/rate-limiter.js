@@ -2,10 +2,11 @@ import mongoose from 'mongoose';
 import { RateLimiterMongo } from 'rate-limiter-flexible';
 import { dbUri } from '../../config/index.js';
 import { errorHelper } from '../../utils/index.js';
-
-
+import { config } from 'dotenv';
+config();
+const { MONGODB_URL } = process.env
 mongoose.set("strictQuery", false);
-const mongoConn = mongoose.createConnection(dbUri, {useNewUrlParser: true, useUnifiedTopology: true});
+const mongoConn = mongoose.createConnection(MONGODB_URL, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const opts = {
   storeClient: mongoConn,
