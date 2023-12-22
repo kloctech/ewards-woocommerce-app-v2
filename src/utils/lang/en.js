@@ -72,5 +72,8 @@ export default {
   "00013": "Store installed.",
   "00014": "Successfully created EwardsKey.",
   "00015": "Successfully updated EwardsKey.",
-  "00016": "MerchantId dosent match with store url."
+  "00016": "MerchantId dosent match with store url.",
+  "00017": "MerchantId not found.",
+  "00018": "Store not found.",
+  "00019": "MerchantId and store url both not found.",
 };
