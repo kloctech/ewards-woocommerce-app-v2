@@ -11,7 +11,7 @@ export default (code, req, errorMessage) => {
   if (req && req.user && req.user._id) userId = req.user._id;
 
   const enMessage = en[key];
-  const trMessage = tr[key];
+  // const trMessage = tr[key];
 
   if (enMessage.includes('server error')) {
     logger(code, userId, errorMessage, 'Server Error', req);
@@ -21,8 +21,7 @@ export default (code, req, errorMessage) => {
 
   return {
     'resultMessage': {
-      'en': enMessage,
-      'tr': trMessage
+      'en': enMessage
     },
     'resultCode': code
   };

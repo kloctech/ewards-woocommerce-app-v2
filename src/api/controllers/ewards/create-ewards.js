@@ -47,7 +47,7 @@ export default async (req, res) => {
     .catch((err) => {
       return res.status(500).json(errorHelper('00034', req, err.message));
     });
-    // logger('00002', ewards_merchant._id, getText('en', '00002'), 'Info', req, "EwardsMerchant" );
+    logger('00002', ewards_merchant._id, getText('en', '00002'), 'Info', req, "EwardsMerchant" );
   }
 
   return res.status(200).json({

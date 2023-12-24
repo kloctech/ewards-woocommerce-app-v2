@@ -13,7 +13,7 @@ const logSchema = new Schema({
   level: { type: String, required: true },
   errorMessage: { type: String, required: true },
   ip: { type: String, required: true },
-  model:{type: String, required: true }
+  model: {type: String }
 },
   {
     timestamps: true

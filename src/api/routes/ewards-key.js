@@ -5,7 +5,7 @@ import { getEwardsKey,createEwardsKey,updateEwardsKey} from "../controllers/ewar
 
 router.get('/:id', getEwardsKey);
 router.post('/',createEwardsKey);
-router.post('/:id',updateEwardsKey);
+router.put('/:id',updateEwardsKey);
 
 
 export default router

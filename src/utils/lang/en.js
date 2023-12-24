@@ -58,6 +58,7 @@ export default {
   "00086": "Your profile information was changed successfully.",
   "00089": "The user information has gotten successfully.",
   "00092": "Your account was deleted successfully.",
+  "00000": "Error while fetching the data on the database.",
   "00001": "Please provide a Valid Merchant ID.",
   "00002": "Successfully Created EwardsMerchant",
   "00003": "An account with this merchant id already exists.",
@@ -71,9 +72,13 @@ export default {
   "00012": "Store not installed.",
   "00013": "Store installed.",
   "00014": "Successfully created EwardsKey.",
-  "00015": "Successfully updated EwardsKey.",
+  "00015": "EwardsKey not found.",
   "00016": "MerchantId dosent match with store url.",
   "00017": "MerchantId not found.",
   "00018": "Store not found.",
   "00019": "MerchantId and store url both not found.",
+  "00020": "The ewards key information has gotten successfully.",
+  "00021": "The ewards key information has created successfully.",
+  "00022": "The ewards key information has updated successfully.",
+  "00023": "The ewards key id not found."
 };
