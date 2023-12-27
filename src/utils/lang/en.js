@@ -80,5 +80,5 @@ export default {
   "00020": "The ewards key information has gotten successfully.",
   "00021": "The ewards key information has created successfully.",
   "00022": "The ewards key information has updated successfully.",
-  "00023": "The ewards key id not found."
+  "00023": "The ewards key not found."
 };
