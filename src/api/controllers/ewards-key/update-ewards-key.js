@@ -45,6 +45,7 @@ export default async (req, res) => {
 
   if(req.body.customer_key)  ewards_key.customer_key = req.body.customer_key;
   if(req.body.x_api_key)  ewards_key.x_api_key = req.body.x_api_key;
+  if(req.body.notes)  ewards_key.notes = req.body.notes;
   if(req.body.merchant_id)  ewards_key.ewards_merchant_id = merchant._id;
   if(req.body.store_url)  ewards_key.woo_commerce_id = woo_commerce._id;
 
