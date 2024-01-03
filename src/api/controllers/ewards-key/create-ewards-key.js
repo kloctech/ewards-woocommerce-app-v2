@@ -47,16 +47,16 @@ export default async (req, res) => {
     });
   }
 
-  let ewardsKey = new EwardsKey(req.body)
-    ewardsKey.ewards_merchant_id = merchant._id
-    ewardsKey.woo_commerce_id = woo_commerce._id
-    ewardsKey = await ewardsKey.save()
+  let ewards_key = new EwardsKey(req.body)
+    ewards_key.ewards_merchant_id = merchant._id
+    ewards_key.woo_commerce_id = woo_commerce._id
+    ewards_key = await ewards_key.save()
     .catch((err) => {
       return res.status(500).json(err.errors);
     });
-  logger('00021', ewardsKey._id, getText('en', '00021'), 'Info', req,"EwardsKey");
+  logger('00021', ewards_key._id, getText('en', '00021'), 'Info', req,"EwardsKey");
   return res.status(200).json({
     resultMessage: { en: getText('en', '00021') },
-    resultCode: '00021', ewardsKey
+    resultCode: '00021', ewards_key
   });
 }
