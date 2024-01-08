@@ -8,6 +8,7 @@ import OrderModel from "./order.js";
 import couponModel from "./woo-commerce-coupons.js";
 import wooCommerceCustomersModel from "./woo-commerce-customer.js";
 import eWardsCartModel from "./ewards-cart.js";
+import WoocommerceWebhookModel from "./woo-commerce-webhooks.js";
 
 export const User = userModel;
 export const Token = tokenModel;
@@ -19,3 +20,4 @@ export const order = OrderModel;
 export const Coupon = couponModel;
 export const Customer = wooCommerceCustomersModel;
 export const Cart = eWardsCartModel;
+export const WoocommerceWebhook = WoocommerceWebhookModel;

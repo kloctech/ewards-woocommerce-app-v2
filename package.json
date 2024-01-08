@@ -28,7 +28,7 @@
     "swagger-ui-express": "^4.1.6"
   },
   "scripts": {
-    "start": "nodemon src/app.js",
+    "start": "cd src && nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "swagger": "node ./swagger.js"
   },
