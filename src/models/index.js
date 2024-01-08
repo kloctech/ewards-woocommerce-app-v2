@@ -1,9 +1,13 @@
-import userModel from './user.js';
-import tokenModel from './token.js';
-import logModel from './log.js';
-import ewardsModel from './ewards.js';
-import wooComerceModel from './woo-commerce.js';
-import ewardsKeyModel from  './ewards-key.js';
+import userModel from "./user.js";
+import tokenModel from "./token.js";
+import logModel from "./log.js";
+import ewardsModel from "./ewards.js";
+import wooComerceModel from "./woo-commerce.js";
+import ewardsKeyModel from "./ewards-key.js";
+import OrderModel from "./order.js";
+import couponModel from "./woo-commerce-coupons.js";
+import wooCommerceCustomersModel from "./woo-commerce-customer.js";
+import eWardsCartModel from "./ewards-cart.js";
 
 export const User = userModel;
 export const Token = tokenModel;
@@ -11,3 +15,7 @@ export const Log = logModel;
 export const EwardsMerchant = ewardsModel;
 export const WooCommerce = wooComerceModel;
 export const EwardsKey = ewardsKeyModel;
+export const order = OrderModel;
+export const Coupon = couponModel;
+export const Customer = wooCommerceCustomersModel;
+export const Cart = eWardsCartModel;
