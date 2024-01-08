@@ -1,18 +1,32 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "My API",
+    "title": "Kloc-Ewards",
     "description": "Description",
     "version": "1.0.0"
   },
-  "host": "localhost:3001",
+  "host": "localhost:3001/api/ewards-key",
   "basePath": "/",
+  "tags": [
+    {
+      "name": "ewards-key",
+      "description": "all ewards-key APIs"
+    }
+  ],
   "schemes": [
     "http"
   ],
   "paths": {
-    "/docs": {
+    "/": {
       "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
         "description": "",
         "responses": {
           "default": {
@@ -21,25 +35,17 @@
         }
       }
     },
-    "/user/": {
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
+    "/{id}": {
       "put": {
         "description": "",
-        "responses": {
-          "default": {
-            "description": ""
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
-        }
-      },
-      "get": {
-        "description": "",
+        ],
         "responses": {
           "default": {
             "description": ""
@@ -48,94 +54,14 @@
       },
       "delete": {
         "description": "",
-        "responses": {
-          "default": {
-            "description": ""
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
-        }
-      }
-    },
-    "/user/login": {
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/user/logout": {
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/user/verify-email": {
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/user/refresh-token": {
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/user/forgot-password": {
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/user/send-verification-code": {
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/user/change-password": {
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/ewards/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
-      "post": {
-        "description": "",
+        ],
         "responses": {
           "default": {
             "description": ""
