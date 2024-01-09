@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+const { Schema, model } = mongoose;
 
-const orderSchema = new mongoose.Schema({
+const OrderSchema = new Schema({
   woo_order_json: { type: Object }, // Storing as Object assuming it will hold JSON data
   woo_order_id: { type: String, required: true },
   gross_amount: { type: Number, required: true },
@@ -14,6 +15,6 @@ const orderSchema = new mongoose.Schema({
   order_cancelled: { type: Boolean, default: false },
 });
 
-const OrderModel = mongoose.model("Order", orderSchema);
+const Order = model("Order", OrderSchema);
 
-export default OrderModel;
+export default Order;

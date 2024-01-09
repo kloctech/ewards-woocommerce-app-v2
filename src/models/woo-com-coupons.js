@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
+const { Schema, model } = mongoose;
 
-const couponSchema = new mongoose.Schema({
+const CouponSchema = new Schema({
   ewards_cart_id: { type: String, required: true },
   woo_coupon_code: { type: String, required: true },
   ewards_coupon_code: { type: String },
   ewards_points: { type: Number },
 });
 
-const couponModel = mongoose.model("Coupon", couponSchema);
+const Coupon = model("Coupon", CouponSchema);
 
-export default couponModel;
+export default Coupon;

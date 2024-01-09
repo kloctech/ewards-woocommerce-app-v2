@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+const { Schema, model } = mongoose;
 
-const woocommerceWebhookSchema = new mongoose.Schema({
+const WooComWebhookSchema = new Schema({
   delivery_url: { type: String, required: true },
   topic: { type: String, required: true },
   status: { type: String, required: true }, // Default value for status
@@ -8,9 +9,6 @@ const woocommerceWebhookSchema = new mongoose.Schema({
   woo_commerce_id: { type: String, required: true, unique: true }, // Unique ID for WooCommerce
 });
 
-const WoocommerceWebhook = mongoose.model(
-  "WoocommerceWebhook",
-  woocommerceWebhookSchema
-);
+const WooComWebhook = model("WooCommerceWebhook", WooComWebhookSchema);
 
-export default WoocommerceWebhook;
+export default WooComWebhook;

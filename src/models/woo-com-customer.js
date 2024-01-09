@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+const { Schema, model } = mongoose;
 
-const wooCommerceCustomer = new mongoose.Schema({
+const WooComCustomerSchema = new Schema({
   last_name: { type: String, required: true },
   mobile: { type: String, required: true },
   first_name: { type: String, required: true },
@@ -13,9 +14,6 @@ const wooCommerceCustomer = new mongoose.Schema({
   state: { type: String },
 });
 
-const wooCommerceCustomersModel = mongoose.model(
-  "WooCommerceCustomers",
-  wooCommerceCustomer
-);
+const WooComCustomers = model("WooCommerceCustomers", WooComCustomerSchema);
 
-export default wooCommerceCustomersModel;
+export default WooComCustomers;

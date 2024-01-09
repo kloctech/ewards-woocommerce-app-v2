@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+const { Schema, model } = mongoose;
 
-const eWardsCartSchema = new mongoose.Schema({
+const EWardsCartSchema = new Schema({
   cart_token: { type: String, required: true },
   customer_id: { type: String, required: true },
 });
 
-const eWardsCartModel = mongoose.model("EWardsCart", eWardsCartSchema);
+const EWardsCart = model("EWardsCart", EWardsCartSchema);
 
-export default eWardsCartModel;
+export default EWardsCart;
