@@ -6,7 +6,7 @@ const WooComWebhookSchema = new Schema({
   topic: { type: String, required: true },
   status: { type: String, required: true },
   name: { type: String, required: true },
-  woo_commerce_id: { type: Schema.Types.ObjectId, required: true, ref: 'woo-commerce' },
+  woo_commerce_id: { type: Schema.Types.ObjectId, required: true, ref: 'WooCommerce' },
 });
 
 const WooComWebhook = model("WooCommerceWebhook", WooComWebhookSchema);
