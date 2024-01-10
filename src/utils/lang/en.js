@@ -82,4 +82,6 @@ export default {
   "00022": "The ewards key information has updated successfully.",
   "00023": "The ewards key not found.",
   "00024": "The ewards key information has deleted successfully.",
+  "00092": "The webhook could not be created successfully.",
+  "00093": "The webhook data could not be stored in db."
 };

@@ -2,6 +2,7 @@ import wc from "@woocommerce/woocommerce-rest-api";
 const WooCommerceRestApi = wc.default;
 import { Production_URL } from '../../../config/index.js'
 import { WoocomWebhooks, WooCommerce } from '../../../models/index.js'
+import { errorHelper, logger, getText } from '../../../utils/index.js';
 
 const webHooksArr = [
   {
@@ -54,25 +55,27 @@ export default class RegisterWebhookService {
     });
 
     for (const hook of webHooksArr) {
-      try {
-        const data = {
-          name: hook.name,
-          topic: hook.topic,
-          delivery_url: hook.deliveryUrl
-        };
+      const data = {
+        name: hook.name,
+        topic: hook.topic,
+        delivery_url: hook.deliveryUrl
+      };
 
-        const response = await apiWooComm.post('webhooks', data);
-        if (response.status === 201) {
-          console.log('Webhook registered:', response.data.name);
-          const { name, topic, status, delivery_url } = response.data
-          let webHookData = {
-            name, topic, status, delivery_url, woo_commerce_id: this.woo_commerce_id
-          }
-          const webHook = await WoocomWebhooks.create(webHookData)
-          console.log(webHook)
+      const response = await apiWooComm.post('webhooks', data)
+        .catch((err) => {
+          return res.status(400).json(getText('en', '00092'));
+        })
+
+      if (response.status === 201) {
+        console.log('Webhook registered:', response.data.name);
+        const { name, topic, status, delivery_url } = response.data
+        let webHookData = {
+          name, topic, status, delivery_url, woo_commerce_id: this.woo_commerce_id
         }
-      } catch (error) {
-        console.log(`Failed to register webhook ${hook.name}:`, error.response ? error.response.data : error.message);
+        const webHook = await WoocomWebhooks.create(webHookData)
+          .catch(err => {
+            return res.status(400).json(getText('en', '00093'));
+          })
       }
     }
   }
