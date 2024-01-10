@@ -3,7 +3,7 @@ import { errorHelper, logger, getText } from '../../../utils/index.js';
 
 export default async (req, res) => {
 
-  const ewards_key =  await EwardsKey.deleteOne({ _id: req.params.id })
+  const ewardsKey =  await EwardsKey.deleteOne({ _id: req.params.id })
   .catch((err) => {
     if (err.message.indexOf('Cast to ObjectId failed') !== -1)
         return res.status(404).json({
@@ -17,12 +17,12 @@ export default async (req, res) => {
       } );
   });
 
-  if (ewards_key.deletedCount == 0) return res.status(404).json(errorHelper('00023', req));
-  logger('00024', ewards_key._id, getText('en', '00024'), 'Info',req, "EwardsKey");
+  if (ewardsKey.deletedCount == 0) return res.status(404).json(errorHelper('00023', req));
+  logger('00024', ewardsKey._id, getText('en', '00024'), 'Info',req, "EwardsKey");
   return res.status(200).json({
     resultMessage: { en: getText('en', '00024') },
     resultCode: '00024',
-    ewards_key
+    ewards_key: ewardsKey
   });
 };
 /**
