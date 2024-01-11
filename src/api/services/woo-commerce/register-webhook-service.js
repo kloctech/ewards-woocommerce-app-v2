@@ -1,7 +1,7 @@
 import wc from "@woocommerce/woocommerce-rest-api";
 const WooCommerceRestApi = wc.default;
 import { Production_URL } from '../../../config/index.js'
-import { WoocomWebhooks, WooCommerce } from '../../../models/index.js'
+import { WoocomWebhooks } from '../../../models/index.js'
 import { errorHelper, logger, getText } from '../../../utils/index.js';
 
 const webHooksArr = [
@@ -44,39 +44,51 @@ export default class RegisterWebhookService {
     this.consumer_key = wooCommerce.consumer_key;
     this.consumer_secret = wooCommerce.consumer_secret;
     this.woo_commerce_id = wooCommerce._id
-  }
-
-  async execute() {
-    const apiWooComm = new WooCommerceRestApi({
+    this.apiWooComm = new WooCommerceRestApi({
       url: this.store_url,
       consumerKey: this.consumer_key,
       consumerSecret: this.consumer_secret,
       version: 'wc/v3'
     });
+  }
+  // Function to store webhook data in db
+  async _storeData(hookData) {
+    const { name, topic, status, delivery_url } = hookData
+    let webHookData = {
+      name, topic, status, delivery_url, woo_commerce_id: this.woo_commerce_id
+    }
+    const webHook = await WoocomWebhooks.create(webHookData)
+      .catch(err => {
+        console.log(err)
+        logger('00093', '', getText('en', '00093'), 'Error', '', "WoocomWebhooks");
+      })
+    // console.log(webHook)
+    logger('00095', webHook._id, getText('en', '00095'), 'Info', '', "WoocomWebhooks");
+  }
 
+  // Function to create webhook in woocommerce
+  async _createWebhook(hook) {
+    const data = {
+      name: hook.name,
+      topic: hook.topic,
+      delivery_url: hook.deliveryUrl
+    };
+    const response = await this.apiWooComm.post('webhooks', data)
+      .catch((err) => {
+        console.log(err)
+        logger('00092', '', getText('en', '00092'), 'Error', '', "");
+      })
+
+    if (response && response?.status === 201) {
+      // console.log('Webhook registered:', response.data.name);
+      logger('00094', response.data.id, getText('en', '00094'), 'Info', '', "");
+      this._storeData(response.data)
+    }
+  }
+
+  async execute() {
     for (const hook of webHooksArr) {
-      const data = {
-        name: hook.name,
-        topic: hook.topic,
-        delivery_url: hook.deliveryUrl
-      };
-
-      const response = await apiWooComm.post('webhooks', data)
-        .catch((err) => {
-          return res.status(400).json(getText('en', '00092'));
-        })
-
-      if (response.status === 201) {
-        console.log('Webhook registered:', response.data.name);
-        const { name, topic, status, delivery_url } = response.data
-        let webHookData = {
-          name, topic, status, delivery_url, woo_commerce_id: this.woo_commerce_id
-        }
-        const webHook = await WoocomWebhooks.create(webHookData)
-          .catch(err => {
-            return res.status(400).json(getText('en', '00093'));
-          })
-      }
+      await this._createWebhook(hook)
     }
   }
 }
