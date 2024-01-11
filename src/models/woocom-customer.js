@@ -14,6 +14,5 @@ const WooComCustomerSchema = new Schema({
   state: { type: String },
 });
 
-const WooComCustomers = model("WooCommerceCustomers", WooComCustomerSchema);
-
-export default WooComCustomers;
+const WooComCustomer = model("WooCommerceCustomer", WooComCustomerSchema);
+export default WooComCustomer;

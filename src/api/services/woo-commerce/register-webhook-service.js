@@ -1,7 +1,7 @@
 import wc from "@woocommerce/woocommerce-rest-api";
 const WooCommerceRestApi = wc.default;
 import { Production_URL } from '../../../config/index.js'
-import { WoocomWebhooks } from '../../../models/index.js'
+import { WoocomWebhook } from '../../../models/index.js'
 import { errorHelper, logger, getText } from '../../../utils/index.js';
 
 const webHooksArr = [
@@ -51,19 +51,11 @@ export default class RegisterWebhookService {
       version: 'wc/v3'
     });
   }
-  // Function to store webhook data in db
-  async _storeData(hookData) {
-    const { name, topic, status, delivery_url } = hookData
-    let webHookData = {
-      name, topic, status, delivery_url, woo_commerce_id: this.woo_commerce_id
+
+  async execute() {
+    for (const hook of webHooksArr) {
+      await this._createWebhook(hook)
     }
-    const webHook = await WoocomWebhooks.create(webHookData)
-      .catch(err => {
-        console.log(err)
-        logger('00093', '', getText('en', '00093'), 'Error', '', "WoocomWebhooks");
-      })
-    // console.log(webHook)
-    logger('00095', webHook._id, getText('en', '00095'), 'Info', '', "WoocomWebhooks");
   }
 
   // Function to create webhook in woocommerce
@@ -76,19 +68,24 @@ export default class RegisterWebhookService {
     const response = await this.apiWooComm.post('webhooks', data)
       .catch((err) => {
         console.log(err)
-        logger('00092', '', getText('en', '00092'), 'Error', '', "");
       })
 
     if (response && response?.status === 201) {
-      // console.log('Webhook registered:', response.data.name);
-      logger('00094', response.data.id, getText('en', '00094'), 'Info', '', "");
       this._storeData(response.data)
     }
   }
-
-  async execute() {
-    for (const hook of webHooksArr) {
-      await this._createWebhook(hook)
+  // Function to store webhook data in db
+  async _storeData(hookData) {
+    const { name, topic, status, delivery_url } = hookData
+    let webHookData = {
+      name, topic, status, delivery_url, woo_commerce_id: this.woo_commerce_id
     }
+    const webHook = await WoocomWebhook.create(webHookData)
+      .catch(err => {
+        console.log(err)
+        logger('00093', '', getText('en', '00093'), 'Error', '', "WoocomWebhooks");
+      })
+    // console.log(webHook)
+    logger('00095', webHook._id, getText('en', '00095'), 'Info', '', "WoocomWebhooks");
   }
 }
