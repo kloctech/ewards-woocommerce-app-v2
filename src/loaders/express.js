@@ -9,6 +9,9 @@ import { logger } from '../utils/index.js';
 import { rateLimiter } from '../api/middlewares/index.js';
 import { jwtSecretKey } from '../config/index.js';
 import bodyParser from 'body-parser';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../../swagger-output.json'  assert { type: 'json' };
+
 
 export default (app) => {
   process.on('uncaughtException', async (error) => {
@@ -39,6 +42,8 @@ export default (app) => {
 
   app.use(rateLimiter);
   app.use(prefix, routes);
+
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
   app.get('/', (_req, res) => {
     return res.status(200).json({

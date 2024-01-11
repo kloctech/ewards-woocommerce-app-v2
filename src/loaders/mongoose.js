@@ -7,7 +7,7 @@ const { MONGODB_URI } = process.env
 
 export default async () => {
   mongoose.set("strictQuery", false);
-  await mongoose.connect(MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true})
+  await mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
       console.log('Mongodb Connection');
     })

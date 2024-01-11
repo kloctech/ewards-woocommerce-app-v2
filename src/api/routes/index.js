@@ -18,6 +18,6 @@ router.use('/user', user);
 router.use('/ewards', ewards);
 router.use('/woo-commerce', woocommerce);
 router.use('/ewards-key', ewardskey);
-router.use('/cart',cart);
+router.use('/cart', cart);
 
 export default router;
