@@ -10,8 +10,10 @@ export default async (req, res) => {
 
   let ewardsKey = new EwardsKey(req.body);
 
-  ewardsKey.ewards_merchant_id = EwardsMerchant._id;
-  ewardsKey.woo_commerce_id = WooCommerce._id;
+  // ewardsKey.ewards_merchant_id = EwardsMerchant._id;
+  // ewardsKey.woo_commerce_id = WooCommerce._id;
+  ewardsKey.ewards_merchant_id = merchantExists._id;
+  ewardsKey.woo_commerce_id = wooCommerceExists._id;
 
   ewardsKey = await ewardsKey.save().catch((err) => {
     return res.status(500).json(err.errors);

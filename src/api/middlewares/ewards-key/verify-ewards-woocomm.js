@@ -32,22 +32,22 @@ export default async (req, res, next) => {
     return res.status(500).json(errorHelper("00031", req, err.message));
   });
 
-  if (!wooCommerceExists && !merchantExists) {
-    return res.status(404).json({
-      resultMessage: { en: getText("en", "00019") },
-      resultCode: "00019",
-    });
-  } else if (!wooCommerceExists) {
-    return res.status(404).json({
-      resultMessage: { en: getText("en", "00018") },
-      resultCode: "00018",
-    });
-  } else if (!merchantExists) {
-    return res.status(404).json({
-      resultMessage: { en: getText("en", "00017") },
-      resultCode: "00017",
-    });
-  }
+  // if (!wooCommerceExists && !merchantExists) {
+  //   return res.status(404).json({
+  //     resultMessage: { en: getText("en", "00019") },
+  //     resultCode: "00019",
+  //   });
+  // } else if (!wooCommerceExists) {
+  //   return res.status(404).json({
+  //     resultMessage: { en: getText("en", "00018") },
+  //     resultCode: "00018",
+  //   });
+  // } else if (!merchantExists) {
+  //   return res.status(404).json({
+  //     resultMessage: { en: getText("en", "00017") },
+  //     resultCode: "00017",
+  //   });
+  // }
 
   req.merchantExists = merchantExists;
   req.wooCommerceExists = wooCommerceExists;
