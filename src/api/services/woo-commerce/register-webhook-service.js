@@ -1,8 +1,8 @@
-import wc from "@woocommerce/woocommerce-rest-api";
-const WooCommerceRestApi = wc.default;
+import pkg from "@woocommerce/woocommerce-rest-api";
+const WooCommerceRestApi = pkg.default;
 import { Production_URL } from '../../../config/index.js'
 import { WoocomWebhook } from '../../../models/index.js'
-import { errorHelper, logger, getText } from '../../../utils/index.js';
+import { logger, getText } from '../../../utils/index.js';
 
 const webHooksArr = [
   {
@@ -85,7 +85,6 @@ export default class RegisterWebhookService {
         console.log(err)
         logger('00093', '', getText('en', '00093'), 'Error', '', "WoocomWebhooks");
       })
-    // console.log(webHook)
     logger('00095', webHook._id, getText('en', '00095'), 'Info', '', "WoocomWebhooks");
   }
 }

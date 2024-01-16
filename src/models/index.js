@@ -7,7 +7,7 @@ import ewardsKeyModel from "./ewards-key.js";
 import orderModel from "./order.js";
 import couponModel from "./woocom-coupon.js";
 import wooComCustomerModel from "./woocom-customer.js";
-import eWardsCartModel from "./ewards-cart.js";
+import ewardsCartModel from "./ewards-cart.js";
 import wooComWebhookModel from "./woocom-webhook.js";
 
 export const User = userModel;
@@ -19,5 +19,5 @@ export const EwardsKey = ewardsKeyModel;
 export const Order = orderModel;
 export const Coupon = couponModel;
 export const Customer = wooComCustomerModel;
-export const Cart = eWardsCartModel;
+export const Cart = ewardsCartModel;
 export const WoocomWebhook = wooComWebhookModel;
