@@ -19,11 +19,12 @@ export default async (req, res) => {
     }
   );
 
+  //console.log(ewardsKey);
   if (req.body.customer_key) ewardsKey.customer_key = req.body.customer_key;
   if (req.body.x_api_key) ewardsKey.x_api_key = req.body.x_api_key;
   if (req.body.notes) ewardsKey.notes = req.body.notes;
-  if (req.body.merchant_id) ewardsKey.ewards_merchant_id = merchant._id;
-  if (req.body.store_url) ewardsKey.woo_commerce_id = wooCommerce._id;
+  if (req.body.merchant_id) ewardsKey.ewards_merchant_id = merchantExists;
+  if (req.body.store_url) ewardsKey.woo_commerce_id = wooCommerceExists;
 
   await ewardsKey.save().catch((err) => {
     return res.status(500).json(errorHelper("00000", req, err.message));
