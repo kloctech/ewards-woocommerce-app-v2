@@ -2,45 +2,40 @@ import { EwardsKey } from "../../../models/index.js";
 import { errorHelper, logger, getText } from "../../../utils/index.js";
 
 export default async (req, res) => {
+  const ewardsKeyId = req.params.id;
   const { merchantExists, wooCommerceExists } = req;
+  const { customer_key, x_api_key, notes, merchant_id, store_url } = req.body
+  const ewardsKey = {
+    ...(customer_key && { customer_key }),
+    ...(x_api_key && { x_api_key }),
+    ...(notes && { notes }),
+    ...(merchant_id && { ewards_merchant_id: merchantExists }),
+    ...(store_url && { woo_commerce_id: wooCommerceExists }),
+  };
 
-  const ewardsKey = await EwardsKey.findOne({ _id: req.params.id }).catch(
-    (err) => {
-      if (err.message.indexOf("Cast to ObjectId failed") !== -1)
-        return res.status(404).json({
-          resultMessage: { en: getText("en", "00023") },
-          resultCode: "00023",
-        });
-
-      return res.status(500).json({
-        resultMessage: { en: getText("en", "00000") },
-        resultCode: "Error while fetching the data on the database",
+  const result = await EwardsKey.findByIdAndUpdate({ _id: ewardsKeyId }, ewardsKey)
+    .then(result => {
+      logger("00022", ewardsKey._id, getText("en", "00022"), "Info", req, "EwardsKey");
+      return res.status(200).json({
+        resultMessage: { en: getText("en", "00022") },
+        resultCode: "00022",
+        ewardsKey,
       });
-    }
-  );
-
-  //console.log(ewardsKey);
-  if (req.body.customer_key) ewardsKey.customer_key = req.body.customer_key;
-  if (req.body.x_api_key) ewardsKey.x_api_key = req.body.x_api_key;
-  if (req.body.notes) ewardsKey.notes = req.body.notes;
-  if (req.body.merchant_id) ewardsKey.ewards_merchant_id = merchantExists;
-  if (req.body.store_url) ewardsKey.woo_commerce_id = wooCommerceExists;
-
-  await ewardsKey.save().catch((err) => {
-    return res.status(500).json(errorHelper("00000", req, err.message));
-  });
-
-  logger(
-    "00022",
-    ewardsKey._id,
-    getText("en", "00022"),
-    "Info",
-    req,
-    "EwardsKey"
-  );
-  return res.status(200).json({
-    resultMessage: { en: getText("en", "00022") },
-    resultCode: "00022",
-    ewardsKey,
-  });
+    }).catch(
+      (err) => {
+        if (err.message.indexOf("Cast to ObjectId failed") !== -1) {
+          logger("00023", ewardsKeyId, getText("en", "00023"), "Error", req, "EwardsKey");
+          return res.status(404).json({
+            resultMessage: { en: getText("en", "00023") },
+            resultCode: "00023",
+          });
+        } else {
+          logger("00097", ewardsKey._id, getText("en", "00097"), "Error", req, "EwardsKey");
+          return res.status(500).json({
+            resultMessage: { en: getText("en", "00098") },
+            resultCode: "00098",
+          });
+        }
+      }
+    )
 };

@@ -9,10 +9,7 @@ export default {
   "00009": "Could not find verified user with the given token and id. Be sure that the account was verified and activated.",
   "00011": "Your session is expired, please log in again.",
   "00012": "Invalid token. the token may have expired.",
-  "00017": "Access denied. You do not have permission to access.",
-  "00019": "Access denied. You do not have permission to access.",
   "00021": "Access denied. You do not have permission to access.",
-  "00022": "No id provided in params. Please enter an id.",
   "00023": "Provided id is not a valid object id.",
   "00024": "Too many request.",
   "00025": "Please provide all the required fields!",
@@ -86,4 +83,7 @@ export default {
   "00093": "The webhook data could not be stored in db.",
   "00094": "The webhook created successfully.",
   "00095": "The webhook data stored in db successfully.",
+  "00096": "The ewards key information could not be created.",
+  "00097": "The ewards key information could not be updated.",
+  "00098": "Error while updating the data on the database."
 };

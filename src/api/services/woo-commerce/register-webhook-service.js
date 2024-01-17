@@ -85,7 +85,6 @@ export default class RegisterWebhookService {
         console.log(err)
         logger('00093', '', getText('en', '00093'), 'Error', '', "WoocomWebhooks");
       })
-    // console.log(webHook)
     logger('00095', webHook._id, getText('en', '00095'), 'Info', '', "WoocomWebhooks");
   }
 }

@@ -7,12 +7,6 @@
   },
   "host": "localhost:3001/api/ewards-key",
   "basePath": "/",
-  "tags": [
-    {
-      "name": "ewards-key",
-      "description": "all ewards-key APIs"
-    }
-  ],
   "schemes": [
     "http"
   ],
@@ -28,9 +22,38 @@
       },
       "post": {
         "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "merchant_id": {
+                  "example": "any"
+                },
+                "store_url": {
+                  "example": "any"
+                },
+                "customer_key": {
+                  "example": "any"
+                },
+                "x_api_key": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -44,11 +67,38 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "merchant_id": {
+                  "example": "any"
+                },
+                "store_url": {
+                  "example": "any"
+                },
+                "customer_key": {
+                  "example": "any"
+                },
+                "x_api_key": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
