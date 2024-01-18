@@ -4,7 +4,7 @@ import axios from "axios";
 import { Customer } from "../../../models/index.js";
 import { logger, getText } from '../../../utils/index.js';
 
-export default class SyncCustomers {
+export default class SyncCustomersService {
   constructor(woo_commerce_id,url,consumerKey,consumerSecret){
     this.url = url
     this.consumerKey = consumerKey
@@ -31,7 +31,6 @@ export default class SyncCustomers {
   } 
 
   async #fetchCustomers(nextPageUrl){
-    console.log(nextPageUrl);
     if (nextPageUrl) {
       let response = await axios.get(nextPageUrl)
       .catch((err) => {
