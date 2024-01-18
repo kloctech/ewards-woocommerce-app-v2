@@ -1,8 +1,8 @@
-import wc from "@woocommerce/woocommerce-rest-api";
-const WooCommerceRestApi = wc.default;
+import pkg from "@woocommerce/woocommerce-rest-api";
+const WooCommerceRestApi = pkg.default;
 import { Production_URL } from '../../../config/index.js'
 import { WoocomWebhook } from '../../../models/index.js'
-import { errorHelper, logger, getText } from '../../../utils/index.js';
+import { logger, getText } from '../../../utils/index.js';
 
 const webHooksArr = [
   {
