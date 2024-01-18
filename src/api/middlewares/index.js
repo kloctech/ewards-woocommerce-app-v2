@@ -7,4 +7,4 @@ export {
   checkCreator,
   checkReader,
 } from "./auth/check-authority.js";
-export { default as VerifyEwardsKey } from "./ewards-key/verify-ewards-woocomm.js";
+export { default as VerifyEwardsKey } from "./ewards-key/verify-ewards-key.js";

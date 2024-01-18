@@ -4,22 +4,20 @@ import { validateEwardsKey } from "../../validators/ewards.key.validator.js";
 
 export default async (req, res, next) => {
   const { error } = validateEwardsKey(req.body);
-  console.log(error)
-  const { merchant_id, store_url, customer_key, x_api_key } = req.body
+  const { merchant_id, store_url, customer_key, x_api_key, notes } = req.body
   if (error) {
     let code = "00025";
     return res
       .status(400)
       .json(errorHelper(code, req, error.details[0].message));
   }
-
-  const merchantExists = await EwardsMerchant.exists({
+  const merchant = await EwardsMerchant.exists({
     merchant_id: merchant_id,
   }).catch((err) => {
     return res.status(500).json(errorHelper("00031", req, err.message));
   });
 
-  const wooCommerceExists = await WooCommerce.exists({
+  const wooCommerce = await WooCommerce.exists({
     store_url: store_url,
   }).catch((err) => {
     return res.status(500).json(errorHelper("00031", req, err.message));
@@ -32,15 +30,16 @@ export default async (req, res, next) => {
     });
   }
 
-  if (!wooCommerceExists && !merchantExists) {
+  if (!wooCommerce && !merchant) {
     sendResponse(404, "00019")
-  } else if (!wooCommerceExists) {
+  } else if (!wooCommerce) {
     sendResponse(404, "00018")
-  } else if (!merchantExists) {
+  } else if (!merchant) {
     sendResponse(404, "00017")
   }
 
-  Object.assign(req, { merchantExists, wooCommerceExists });
+  req.merchantId = merchant._id;
+  req.wooCommerceId = wooCommerce._id;
 
   next();
 };

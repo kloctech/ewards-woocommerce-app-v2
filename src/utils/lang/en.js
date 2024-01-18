@@ -85,5 +85,5 @@ export default {
   "00095": "The webhook data stored in db successfully.",
   "00096": "The ewards key information could not be created.",
   "00097": "The ewards key information could not be updated.",
-  "00098": "Error while updating the data on the database."
+  "00098": "The ewards key information could not be deleted."
 };

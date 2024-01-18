@@ -10,9 +10,18 @@
   "schemes": [
     "http"
   ],
+  "tags": [
+    {
+      "name": "ewards-key",
+      "description": "Operations about ewards-key"
+    }
+  ],
   "paths": {
     "/": {
       "get": {
+        "tags": [
+          "ewards-key"
+        ],
         "description": "",
         "responses": {
           "default": {
@@ -21,6 +30,9 @@
         }
       },
       "post": {
+        "tags": [
+          "ewards-key"
+        ],
         "description": "",
         "parameters": [
           {
@@ -60,6 +72,9 @@
     },
     "/{id}": {
       "put": {
+        "tags": [
+          "ewards-key"
+        ],
         "description": "",
         "parameters": [
           {
@@ -103,6 +118,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "ewards-key"
+        ],
         "description": "",
         "parameters": [
           {

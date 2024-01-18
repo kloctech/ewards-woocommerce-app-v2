@@ -5,8 +5,9 @@ export function validateEwardsKey(body) {
     merchant_id: Joi.string().required(),
     store_url: Joi.string().required(),
     customer_key: Joi.string().required(),
-    x_api_key: Joi.string().required()
-  }); 
+    x_api_key: Joi.string().required(),
+    notes: Joi.string().allow('')
+  });
   return schema.validate(body);
 }
 
