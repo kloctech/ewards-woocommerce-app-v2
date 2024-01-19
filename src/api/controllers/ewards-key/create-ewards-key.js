@@ -7,7 +7,7 @@ export default async (req, res) => {
   const { error } = validateEwardsKey(body);
 
   if (error) {
-    let code = '00025';
+    let code = '00027';
     if (error.details[0].message.includes('merchant_id'))
       code = '00038';
     else if (error.details[0].message.includes('store_url'))

@@ -25,7 +25,7 @@ export default class SyncCustomersService {
       console.log(error.response);
     });
     await this.#createCustomers(response.data)
-    logger('00025', this.wooCommerceId, getText('en', '00025'), 'Info', '', "Customer");
+    logger('00027', this.wooCommerceId, getText('en', '00027'), 'Info', '', "Customer");
     let nextUrl = await this.#getNextPageUrl(response.headers.link)
     await this.#fetchCustomers(nextUrl)
   } 
