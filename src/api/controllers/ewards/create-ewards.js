@@ -8,7 +8,7 @@ export default async (req, res) => {
   const { error } = validateEwardsMerchant(body);
 
   if (error) {
-    let code = '00025';
+    let code = '00027';
     if (error.details[0].message.includes('merchant_id'))
       code = '00001';
     else if (error.details[0].message.includes('woo_commerce'))
