@@ -14,10 +14,10 @@ export default async (req, res) => {
   if (wooCommerce) {
     const webhookService = new RegisterWebhookService(wooCommerce);
     webhookService.execute();
-    let consumerKey = wooCommerce.consumer_key
-    let consumerSecret = wooCommerce.consumer_secret
-    const customers = new SyncCustomersService(wooCommerce._id, req.query.store_url, consumerKey, consumerSecret)
-    customers.execute();
+    // let consumerKey = wooCommerce.consumer_key
+    // let consumerSecret = wooCommerce.consumer_secret
+    // const customers = new SyncCustomersService(wooCommerce._id, req.query.store_url, consumerKey, consumerSecret)
+    // customers.execute();
   }
 
   if (!wooCommerce) return res.status(409).json(errorHelper('00004', req));
