@@ -87,5 +87,8 @@ export default {
   "00095": "The webhook data stored in db successfully.",
   "00096": "The ewards key information could not be created.",
   "00097": "The ewards key information could not be updated.",
-  "00098": "The ewards key information could not be deleted."
+  "00098": "The ewards key information could not be deleted.",
+  "00099": "The woo commerce store could not be deleted.",
+  "00100": "The woo commerce store and ewards merchant information has deleted successfully.",
+  "00102": "The ewards merchant information could not be deleted.",
 };
