@@ -7,18 +7,21 @@
   },
   "host": "localhost:3001/api/ewards-key",
   "basePath": "/",
+  "schemes": [
+    "http"
+  ],
   "tags": [
     {
       "name": "ewards-key",
-      "description": "all ewards-key APIs"
+      "description": "Operations about ewards-key"
     }
-  ],
-  "schemes": [
-    "http"
   ],
   "paths": {
     "/": {
       "get": {
+        "tags": [
+          "ewards-key"
+        ],
         "description": "",
         "responses": {
           "default": {
@@ -27,16 +30,51 @@
         }
       },
       "post": {
+        "tags": [
+          "ewards-key"
+        ],
         "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "merchant_id": {
+                  "example": "any"
+                },
+                "store_url": {
+                  "example": "any"
+                },
+                "customer_key": {
+                  "example": "any"
+                },
+                "x_api_key": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
     },
     "/{id}": {
       "put": {
+        "tags": [
+          "ewards-key"
+        ],
         "description": "",
         "parameters": [
           {
@@ -44,15 +82,45 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "merchant_id": {
+                  "example": "any"
+                },
+                "store_url": {
+                  "example": "any"
+                },
+                "customer_key": {
+                  "example": "any"
+                },
+                "x_api_key": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "delete": {
+        "tags": [
+          "ewards-key"
+        ],
         "description": "",
         "parameters": [
           {

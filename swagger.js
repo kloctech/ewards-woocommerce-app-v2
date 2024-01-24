@@ -6,9 +6,7 @@ const doc = {
     description: 'Description',
   },
   host: 'localhost:3001/api/ewards-key',
-  tags: [
-    { name: 'ewards-key', description: 'all ewards-key APIs' }
-  ],
+  tags: [],
   paths: {}, // Will be populated by `swagger-autogen`
 };
 

@@ -1,12 +1,11 @@
-import { Router } from 'express';
+import { Router } from "express";
 const router = Router();
+import { getEwardsKey, createEwardsKey, updateEwardsKey, deleteEwardsKey, } from "../controllers/ewards-key/index.js";
+import verifyEwardsKey from "../middlewares/ewards-key/verify-ewards-key.js";
 
-import { getEwardsKey,createEwardsKey,updateEwardsKey,deleteEwardsKey} from "../controllers/ewards-key/index.js";
+router.get("/", getEwardsKey);
+router.post("/", verifyEwardsKey, createEwardsKey);
+router.put("/:id", verifyEwardsKey, updateEwardsKey);
+router.delete("/:id", deleteEwardsKey);
 
-router.get('/', getEwardsKey);
-router.post('/',createEwardsKey);
-router.put('/:id',updateEwardsKey);
-router.delete('/:id',deleteEwardsKey);
-
-
-export default router
+export default router;

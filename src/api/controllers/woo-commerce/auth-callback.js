@@ -1,6 +1,6 @@
 import { WooCommerce } from "../../../models/index.js";
 import { errorHelper, logger, getText } from '../../../utils/index.js';
-import { RegisterWebhookService } from '../../services/woo-commerce/index.js'
+import { RegisterWebhookService, SyncCustomersService } from '../../services/woo-commerce/index.js'
 
 export default async (req, res) => {
   let body = req.body;
@@ -14,6 +14,10 @@ export default async (req, res) => {
   if (wooCommerce) {
     const webhookService = new RegisterWebhookService(wooCommerce);
     webhookService.execute();
+    let consumerKey = wooCommerce.consumer_key
+    let consumerSecret = wooCommerce.consumer_secret
+    const customers = new SyncCustomersService(wooCommerce._id, wooCommerce.store_url, consumerKey, consumerSecret)
+    customers.execute();
   }
 
   if (!wooCommerce) return res.status(409).json(errorHelper('00004', req));
