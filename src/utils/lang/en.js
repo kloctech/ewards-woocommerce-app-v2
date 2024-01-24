@@ -1,7 +1,7 @@
 export default {
-  "verificationCodeTitle": "Verification Code - (App Name)",
-  "verificationCodeBody": "Here is your confirm code:",
-  "welcomeCode": "Welcome to the (App Name),",
+  verificationCodeTitle: "Verification Code - (App Name)",
+  verificationCodeBody: "Here is your confirm code:",
+  welcomeCode: "Welcome to the (App Name),",
   "00005": "Please provide all information to send a code.",
   "00006": "Access denied. No token provided.",
   "00007": "Invalid user id.",
@@ -38,7 +38,7 @@ export default {
   "00059": "Please provide refresh token.",
   "00061": "The provided token does not match with the user, please login.",
   "00062": "The token has expired, please login.",
-  "00063": "The token couldn\"t be verified, please login.",
+  "00063": 'The token couldn"t be verified, please login.',
   "00065": "The token is refreshed successfully.",
   "00066": "Please provide a password longer than 6, less than 20 characters.",
   "00068": "The new password was created successfully.",
@@ -91,4 +91,5 @@ export default {
   "00099": "The woo commerce store could not be deleted.",
   "00100": "The woo commerce store and ewards merchant information has deleted successfully.",
   "00102": "The ewards merchant information could not be deleted.",
+  "00103": "The woo commerce customers information has gotten successfully.",
 };
