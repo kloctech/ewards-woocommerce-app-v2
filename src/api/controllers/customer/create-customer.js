@@ -4,9 +4,10 @@ import { validateCustomer } from "../../validators/customer.validator.js";
 
 export default async (req, res) => {
   const body = req.body;
+
   if (body.id) {
-    const url = req.rawHeaders[29] || '';
-    const storeUrl = await url.substring(0, url.length - 1);
+    const url = body._links.self[0].href || "";
+    const storeUrl = url.substring(0, url.indexOf('/wp-json')) || url;
 
     const wooCommerce = await WooCommerce.findOne({ store_url: storeUrl }).catch((err) => {
       return res.status(500).json(errorHelper("00018", req, err.message));
@@ -34,19 +35,20 @@ export default async (req, res) => {
         .json(errorHelper(code, req, error.details[0].message));
     }
 
-    const customer = await new Customer(customerObj).save().catch(err => {
-      console.log(err)
+    try {
+      const customer = await new Customer(customerObj).save();
+      logger('00105', customer._id, getText('en', '00105'), 'Info', '', "Customer");
+      return res.status(200).json({
+        resultMessage: { en: getText('en', '00105') },
+        resultCode: '00105',
+        customer
+      });
+    } catch (err) {
       logger('00104', "", getText('en', '00104'), 'Error', '', "Customer");
       return res.status(400).json({
         resultMessage: { en: getText('en', '00104') },
         resultCode: '00104'
       });
-    })
-    logger('00105', customer._id, getText('en', '00105'), 'Info', '', "Customer");
-    return res.status(200).json({
-      resultMessage: { en: getText('en', '00105') },
-      resultCode: '00105',
-      customer
-    });
+    }
   }
 }
