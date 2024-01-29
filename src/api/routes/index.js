@@ -7,6 +7,8 @@ import ewards from "./ewards.js";
 import ewardskey from "./ewards-key.js";
 import woocommerce from "./woo-commerce.js";
 import cart from "./cart.js";
+import customer from "./customer.js"
+
 const router = Router();
 
 const specDoc = swaggerJsdoc(swaggerConfig);
@@ -19,5 +21,6 @@ router.use("/ewards", ewards);
 router.use("/woo-commerce", woocommerce);
 router.use("/ewards-key", ewardskey);
 router.use("/cart", cart);
+router.use('/', customer)
 
 export default router;
