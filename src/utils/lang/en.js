@@ -92,4 +92,6 @@ export default {
   "00100": "The woo commerce store and ewards merchant information has deleted successfully.",
   "00102": "The ewards merchant information could not be deleted.",
   "00103": "The woo commerce customers information has gotten successfully.",
+  "00104": "The woo commerce customer could not be created.",
+  "00105": "The woo commerce customer created successfully."
 };
