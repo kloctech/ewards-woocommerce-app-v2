@@ -21,6 +21,6 @@ router.use("/ewards", ewards);
 router.use("/woo-commerce", woocommerce);
 router.use("/ewards-key", ewardskey);
 router.use("/cart", cart);
-router.use('/', customer)
+router.use('/customer', customer)
 
 export default router;
