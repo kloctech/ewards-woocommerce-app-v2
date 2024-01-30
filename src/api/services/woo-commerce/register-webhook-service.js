@@ -8,32 +8,32 @@ const webHooksArr = [
   {
     name: 'Customer created',
     topic: 'customer.created',
-    deliveryUrl: `${Production_URL}/api/customer_create`
+    deliveryUrl: `${Production_URL}/api/customer/create`
   },
   {
     name: 'Customer updated',
     topic: 'customer.updated',
-    deliveryUrl: `${Production_URL}/api/customer_update`
+    deliveryUrl: `${Production_URL}/api/customer/update`
   },
   {
     name: 'Coupon created',
     topic: 'coupon.created',
-    deliveryUrl: `${Production_URL}/api/coupon_create`
+    deliveryUrl: `${Production_URL}/api/coupon/create`
   },
   {
     name: 'Coupon updated',
     topic: 'coupon.updated',
-    deliveryUrl: `${Production_URL}/api/coupon_update`
+    deliveryUrl: `${Production_URL}/api/coupon/update`
   },
   {
     name: 'Order created',
     topic: 'order.created',
-    deliveryUrl: `${Production_URL}/api/order_create`
+    deliveryUrl: `${Production_URL}/api/order/create`
   },
   {
     name: 'Order updated',
     topic: 'order.updated',
-    deliveryUrl: `${Production_URL}/api/order_update`
+    deliveryUrl: `${Production_URL}/api/order/update`
   }
 
 ]
