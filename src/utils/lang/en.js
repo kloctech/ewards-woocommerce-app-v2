@@ -93,5 +93,7 @@ export default {
   "00102": "The ewards merchant information could not be deleted.",
   "00103": "The woo commerce customers information has gotten successfully.",
   "00104": "The woo commerce customer could not be created.",
-  "00105": "The woo commerce customer created successfully."
+  "00105": "The woo commerce customer created successfully.",
+  "00106": "Store url and origin is not matching.",
+  "00107": "Customer not found"
 };

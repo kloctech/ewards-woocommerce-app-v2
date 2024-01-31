@@ -1,6 +1,6 @@
 import pkg from "@woocommerce/woocommerce-rest-api";
 const WooCommerceRestApi = pkg.default;
-import { Production_URL } from '../../../config/index.js'
+import { productionUrl } from '../../../config/index.js'
 import { WoocomWebhook } from '../../../models/index.js'
 import { logger, getText } from '../../../utils/index.js';
 
@@ -8,32 +8,32 @@ const webHooksArr = [
   {
     name: 'Customer created',
     topic: 'customer.created',
-    deliveryUrl: `${Production_URL}/api/customer/create`
+    deliveryUrl: `${productionUrl}/api/customer/create`
   },
   {
     name: 'Customer updated',
     topic: 'customer.updated',
-    deliveryUrl: `${Production_URL}/api/customer/update`
+    deliveryUrl: `${productionUrl}/api/customer/update`
   },
   {
     name: 'Coupon created',
     topic: 'coupon.created',
-    deliveryUrl: `${Production_URL}/api/coupon/create`
+    deliveryUrl: `${productionUrl}/api/coupon/create`
   },
   {
     name: 'Coupon updated',
     topic: 'coupon.updated',
-    deliveryUrl: `${Production_URL}/api/coupon/update`
+    deliveryUrl: `${productionUrl}/api/coupon/update`
   },
   {
     name: 'Order created',
     topic: 'order.created',
-    deliveryUrl: `${Production_URL}/api/order/create`
+    deliveryUrl: `${productionUrl}/api/order/create`
   },
   {
     name: 'Order updated',
     topic: 'order.updated',
-    deliveryUrl: `${Production_URL}/api/order/update`
+    deliveryUrl: `${productionUrl}/api/order/update`
   }
 
 ]
