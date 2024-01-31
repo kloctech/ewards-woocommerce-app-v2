@@ -1,13 +1,14 @@
 import { Customer, WooCommerce } from "../../../models/index.js";
 import { errorHelper, getText, logger } from "../../../utils/index.js";
 import { validateCustomer } from "../../validators/customer.validator.js";
+import { AddMemberService } from "../../services/ewards/index.js";
 
 export default async (req, res) => {
   const body = req.body;
 
   if (body.id) {
     const url = body._links.self[0].href || "";
-    const storeUrl = url.substring(0, url.indexOf('/wp-json')) || url;
+    const storeUrl = url.substring(0, url.indexOf("/wp-json")) || url;
 
     const wooCommerce = await WooCommerce.findOne({ store_url: storeUrl }).catch((err) => {
       return res.status(500).json(errorHelper("00018", req, err.message));
@@ -25,30 +26,33 @@ export default async (req, res) => {
       state: body.billing.state,
       woo_customer_id: body.id,
       woo_commerce_id: wooCommerce._id,
-      country_code: "+91" // todo: different country code
-    }
+      country_code: "+91", // todo: different country code
+    };
     const { error } = validateCustomer(customerObj);
     if (error) {
       let code = "00025";
-      return res
-        .status(400)
-        .json(errorHelper(code, req, error.details[0].message));
+      return res.status(400).json(errorHelper(code, req, error.details[0].message));
     }
 
     try {
       const customer = await new Customer(customerObj).save();
-      logger('00105', customer._id, getText('en', '00105'), 'Info', '', "Customer");
+      if (customer.mobile) {
+        const member = new AddMemberService(customerObj);
+        member.execute();
+      }
+
+      logger("00105", customer._id, getText("en", "00105"), "Info", "", "Customer");
       return res.status(200).json({
-        resultMessage: { en: getText('en', '00105') },
-        resultCode: '00105',
-        customer
+        resultMessage: { en: getText("en", "00105") },
+        resultCode: "00105",
+        customer,
       });
     } catch (err) {
-      logger('00104', "", getText('en', '00104'), 'Error', '', "Customer");
+      logger("00104", "", getText("en", "00104"), "Error", "", "Customer");
       return res.status(400).json({
-        resultMessage: { en: getText('en', '00104') },
-        resultCode: '00104'
+        resultMessage: { en: getText("en", "00104") },
+        resultCode: "00104",
       });
     }
   }
-}
+};
