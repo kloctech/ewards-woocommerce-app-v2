@@ -8,11 +8,11 @@ export default class AddMemberService {
       first_name: customer_data.first_name,
       last_name: customer_data.last_name || "",
       mobile: customer_data.mobile,
-      address: customer_data.address,
-      city: customer_data.city,
-      state: customer_data.state,
       email: customer_data.email,
       country_code: customer_data.country_code,
+      // address:customer_data.address,
+      // city:customer_data.city,
+      // state: customer_data.state
     };
     this.woo_commerce_id = customer_data.woo_commerce_id;
   }
@@ -60,9 +60,9 @@ export default class AddMemberService {
       };
 
       const { data: response } = await axios.post(ewardsAddMemberApiUrl, requestBody, { headers });
-      console.log(response);
+      console.log("Ewards member created : ", response);
     } catch (error) {
-      console.log(error.message);
+      console.log("Error while creating ewards member : ", error.message);
     }
   }
 }
