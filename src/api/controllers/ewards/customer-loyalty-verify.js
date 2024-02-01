@@ -58,11 +58,11 @@ export default async (req, res) => {
     return res.status(500).json(errorHelper("00111", req, err.message));
   })
 
-  if (loyaltyInfo.status_code === 400) return res.status(400).json(errorHelper("00111", req))
+  if (loyaltyInfo.status_code === 400) return res.status(400).json({
+    resultMessage: { en: loyaltyInfo.response.message }
+  });
 
   return res.status(200).json({
-    resultMessage: { en: getText('en', '00108') },
-    resultCode: '00108',
     loyaltyInfo
   });
 }
