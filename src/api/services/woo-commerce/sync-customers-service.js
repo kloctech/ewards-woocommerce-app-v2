@@ -78,7 +78,7 @@ export default class SyncCustomersService {
     for (let customer of customerData) {
       if (customer.mobile) {
         const member = new AddMemberService(customer);
-        await member.execute();
+        member.execute();
       }
     }
   }

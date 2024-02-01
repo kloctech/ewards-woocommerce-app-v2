@@ -59,23 +59,10 @@ export default class AddMemberService {
         "x-api-key": this.x_api_key,
       };
 
-      const response = await axios.post(`${ewardsAddMemberApiUrl}`, requestBody, { headers });
-      if (response.status === 200) {
-        console.log(response.data.message);
-      }
+      const { data: response } = await axios.post(ewardsAddMemberApiUrl, requestBody, { headers });
+      console.log(response);
     } catch (error) {
-      if (error.response) {
-        const status_code = error.response.data.status_code;
-        if (status_code === 403 && error.response.data.message === "Forbidden") {
-          console.error("AddMemberService: Tampered or removed header -", error.response.data.message);
-        } else if (status_code === 200 && error.response.data.message === "Limit Exceeded") {
-          console.error("AddMemberService: API limit exceeded -", error.response.data.message);
-        } else {
-          console.error("AddMemberService: Error -", error.message);
-        }
-      } else {
-        console.error("AddMemberService: Error -", error.message);
-      }
+      console.log(error.message);
     }
   }
 }
