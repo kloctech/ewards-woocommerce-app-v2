@@ -10,6 +10,9 @@ export default class AddMemberService {
       mobile: customer_data.mobile,
       email: customer_data.email,
       country_code: customer_data.country_code,
+      // address:customer_data.address,
+      // city:customer_data.city,
+      // state: customer_data.state
     };
     this.woo_commerce_id = customer_data.woo_commerce_id;
   }
