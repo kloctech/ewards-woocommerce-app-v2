@@ -93,11 +93,5 @@ export default {
   "00102": "The ewards merchant information could not be deleted.",
   "00103": "The woo commerce customers information has gotten successfully.",
   "00104": "The woo commerce customer could not be created.",
-  "00105": "The woo commerce customer created successfully.",
-  "00106": "Request unauthorized.",
-  "00107": "Customer not found.",
-  "00108": "The ewards customer info verified successfully.",
-  "00109": "The ewards customer info could not get.",
-  "00110": "Merchant not found.",
-  "00111": "The ewards customer info could not be verified.",
+  "00105": "The woo commerce customer created successfully."
 };
