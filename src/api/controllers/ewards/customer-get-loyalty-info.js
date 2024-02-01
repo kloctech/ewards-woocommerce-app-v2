@@ -52,15 +52,16 @@ export default async (req, res) => {
       "x-api-key": ewardsKey.x_api_key,
     },
   };
-  const { data: loyalty_info } = await axios.post(loyaltyInfoRequestApiUrl, ewardsRequestBody, ewardsRequestHeader).catch((err) => {
+  const { data: otpResponse } = await axios.post(loyaltyInfoRequestApiUrl, ewardsRequestBody, ewardsRequestHeader).catch((err) => {
     return res.status(500).json(errorHelper("00113", req, err.message));
   });
 
-  if (loyalty_info.status_code === 400) return res.status(400).json(errorHelper("00113", req));
+  if (otpResponse.status_code === 400)
+    return res.status(400).json({
+      resultMessage: { en: otpResponse.message },
+    });
 
   return res.status(200).json({
-    resultMessage: { en: getText("en", "00112") },
-    resultCode: "00112",
-    loyalty_info,
+    otpResponse,
   });
 };

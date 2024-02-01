@@ -36,9 +36,9 @@ export default async (req, res) => {
 
     try {
       const customer = await new Customer(customerObj).save();
-      if (customer) {
-        const addMemberService = new AddMemberService(customerObj);
-        await addMemberService.execute();
+      if (customer.mobile) {
+        const member = new AddMemberService(customerObj);
+        member.execute();
       }
 
       logger("00105", customer._id, getText("en", "00105"), "Info", "", "Customer");
