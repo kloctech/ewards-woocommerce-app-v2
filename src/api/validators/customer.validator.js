@@ -16,3 +16,14 @@ export function validateCustomer(body) {
   return schema.validate(body);
 }
 
+export function validateCustomerLoyaltyInfoVerify(body) {
+  const schema = Joi.object({
+    mobile_number: Joi.string().required(),
+    country_code: Joi.string().required(),
+    otp: Joi.string().required(),
+    store_url: Joi.string().required(),
+
+  });
+  return schema.validate(body);
+}
+
