@@ -1,42 +1,41 @@
 import pkg from "@woocommerce/woocommerce-rest-api";
 const WooCommerceRestApi = pkg.default;
-import { productionUrl } from '../../../config/index.js'
-import { WoocomWebhook } from '../../../models/index.js'
-import { logger, getText } from '../../../utils/index.js';
+import { productionUrl } from "../../../config/index.js";
+import { WoocomWebhook } from "../../../models/index.js";
+import { logger, getText } from "../../../utils/index.js";
 
 const webHooksArr = [
   {
-    name: 'Customer created',
-    topic: 'customer.created',
-    deliveryUrl: `${productionUrl}/api/customer/create`
+    name: "Customer created",
+    topic: "customer.created",
+    deliveryUrl: `${productionUrl}/api/customer/create`,
   },
   {
-    name: 'Customer updated',
-    topic: 'customer.updated',
-    deliveryUrl: `${productionUrl}/api/customer/update`
+    name: "Customer updated",
+    topic: "customer.updated",
+    deliveryUrl: `${productionUrl}/api/customer/update`,
   },
   {
-    name: 'Coupon created',
-    topic: 'coupon.created',
-    deliveryUrl: `${productionUrl}/api/coupon/create`
+    name: "Coupon created",
+    topic: "coupon.created",
+    deliveryUrl: `${productionUrl}/api/coupon/create`,
   },
   {
-    name: 'Coupon updated',
-    topic: 'coupon.updated',
-    deliveryUrl: `${productionUrl}/api/coupon/update`
+    name: "Coupon updated",
+    topic: "coupon.updated",
+    deliveryUrl: `${productionUrl}/api/coupon/update`,
   },
   {
-    name: 'Order created',
-    topic: 'order.created',
-    deliveryUrl: `${productionUrl}/api/order/create`
+    name: "Order created",
+    topic: "order.created",
+    deliveryUrl: `${productionUrl}/api/order/create`,
   },
   {
-    name: 'Order updated',
-    topic: 'order.updated',
-    deliveryUrl: `${productionUrl}/api/order/update`
-  }
-
-]
+    name: "Order updated",
+    topic: "order.updated",
+    deliveryUrl: `${productionUrl}/api/order/update`,
+  },
+];
 
 export default class RegisterWebhookService {
   constructor(wooCommerce) {

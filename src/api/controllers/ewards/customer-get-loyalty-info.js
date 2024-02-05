@@ -1,18 +1,20 @@
-import axios from "axios";
-import { loyaltyInfoVerifyApiUrl } from "../../../config/index.js";
-import { Customer, WooCommerce } from "../../../models/index.js";
+import { WooCommerce, Customer } from "../../../models/index.js";
 import { errorHelper } from "../../../utils/index.js";
-import { validateCustomerInfoVerify } from "../../validators/customer.validator.js";
+import { loyaltyInfoRequestApiUrl } from "../../../config/index.js";
+import { validateCustomerInfo } from "../../validators/customer.validator.js";
+import axios from "axios";
 
 export default async (req, res) => {
   const body = req.body;
   const origin = req.headers.origin;
 
-  const { error } = validateCustomerInfoVerify(body);
+  const { error } = validateCustomerInfo(body);
+
   if (error) {
     let code = "00025";
     return res.status(400).json(errorHelper(code, req, error.details[0].message));
   }
+
   if (body.store_url !== origin) return res.status(400).json(errorHelper("00106", req));
 
   const woocommerce = await WooCommerce.aggregate([
@@ -36,6 +38,7 @@ export default async (req, res) => {
       },
     },
   ]);
+
   const { merchant: [merchant] = [], ewardsKey: [ewardsKey] = [] } = woocommerce[0];
 
   if (!woocommerce) return res.status(400).json(errorHelper("00018", req));
@@ -48,28 +51,29 @@ export default async (req, res) => {
 
   if (!customer) return res.status(400).json(errorHelper("00107", req));
 
-  const reqHeaders = {
-    "x-api-key": ewardsKey.x_api_key,
-  };
   const requestBody = {
     customer_key: ewardsKey.customer_key,
     merchant_id: merchant.merchant_id,
     mobile: body.mobile_number,
     country_code: body.country_code,
-    otp: body.otp,
   };
 
-  const { data: loyaltyInfo } = await axios.post(loyaltyInfoVerifyApiUrl, requestBody, { headers: reqHeaders }).catch((err) => {
-    console.log(err.message);
-    return res.status(500).json(errorHelper("00111", req, err.message));
+  const requestHeader = {
+    headers: {
+      "x-api-key": ewardsKey.x_api_key,
+    },
+  };
+
+  const { data: otpResponse } = await axios.post(loyaltyInfoRequestApiUrl, requestBody, requestHeader).catch((err) => {
+    return res.status(500).json(errorHelper("00113", req, err.message));
   });
 
-  if (loyaltyInfo.status_code === 400)
+  if (otpResponse.status_code === 400)
     return res.status(400).json({
-      resultMessage: { en: loyaltyInfo.response.message },
+      resultMessage: { en: otpResponse.message },
     });
 
   return res.status(200).json({
-    loyaltyInfo,
+    otpResponse,
   });
 };

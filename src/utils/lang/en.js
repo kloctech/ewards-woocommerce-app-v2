@@ -99,5 +99,7 @@ export default {
   "00108": "The customer info verified successfully.",
   "00109": "The customer info could not get.",
   "00110": "Merchant not found.",
-  "00111": "The ewards customer info could not be verified.",
+  "00111": "The customer info could not be verified.",
+  "00112": "OTP has been sent successfully.",
+  "00113": "OTP could not send.",
 };
