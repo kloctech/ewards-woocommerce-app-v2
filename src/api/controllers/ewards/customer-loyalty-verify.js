@@ -45,7 +45,7 @@ export default async (req, res) => {
   if (!merchant) return res.status(400).json(errorHelper("00110", req))
   if (!ewardsKey) return res.status(400).json(errorHelper("00015", req))
 
-  const customer = await Customer.findOne({ mobile: body.mobile_number }).catch(err => {
+  const customer = await Customer.findOne({ mobile: body.mobile_number, woo_commerce_id: woocommerce[0]._id }).catch(err => {
     return res.status(500).json(errorHelper("00000", req, err.message));
   })
 
