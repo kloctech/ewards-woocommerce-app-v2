@@ -39,9 +39,9 @@ export default async (req, res) => {
     },
   ]);
 
-  const { merchant: [merchant] = [], ewardsKey: [ewardsKey] = [] } = woocommerce[0];
+  if (!woocommerce.length) return res.status(400).json(errorHelper("00018", req));
 
-  if (!woocommerce) return res.status(400).json(errorHelper("00018", req));
+  const { merchant: [merchant] = [], ewardsKey: [ewardsKey] = [] } = woocommerce[0];
   if (!merchant) return res.status(400).json(errorHelper("00110", req));
   if (!ewardsKey) return res.status(400).json(errorHelper("00015", req));
 
