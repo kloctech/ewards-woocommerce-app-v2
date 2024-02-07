@@ -10,11 +10,37 @@ export default async (req, res) => {
     const url = body._links.self[0].href || "";
     const storeUrl = url.substring(0, url.indexOf("/wp-json")) || url;
 
-    const wooCommerce = await WooCommerce.findOne({ store_url: storeUrl }).catch((err) => {
-      return res.status(500).json(errorHelper("00018", req, err.message));
-    });
+    let wooCommerce = await WooCommerce.aggregate([
+      {
+        $match: { store_url: storeUrl }
+      },
+      {
+        $lookup: {
+          from: 'woocommercecustomers',
+          localField: '_id',
+          foreignField: 'woo_commerce_id',
+          as: 'customers'
+        }
+      }
+    ])
+
+    wooCommerce = wooCommerce[0]
 
     if (!wooCommerce) return res.status(404).json(errorHelper("00018", req));
+
+    const { customers = [] } = wooCommerce;
+    const customerExists = customers.find(
+      (customer) =>
+        customer.email === body.email &&
+        customer.woo_customer_id === body.id &&
+        customer.woo_commerce_id.valueOf() === wooCommerce._id.valueOf()
+    );
+    if (customerExists) {
+      return res.status(200).json({
+        resultMessage: { en: getText("en", "00114") },
+        resultCode: "00114"
+      });
+    }
 
     const customerObj = {
       first_name: body.first_name,
