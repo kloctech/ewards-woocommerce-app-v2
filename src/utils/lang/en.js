@@ -102,4 +102,7 @@ export default {
   "00111": "The customer info could not be verified.",
   "00112": "OTP has been sent successfully.",
   "00113": "OTP could not send.",
+  "00114": "Customer already exists.",
+  "00115": "The woo commerce customer updated successfully.",
+  "00116": "No customer found for the given criteria.",
 };
