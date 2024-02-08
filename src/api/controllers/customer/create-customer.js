@@ -10,22 +10,13 @@ export default async (req, res) => {
     const url = body._links.self[0].href || "";
     const storeUrl = url.substring(0, url.indexOf("/wp-json")) || url;
 
-    let wooCommerce = await WooCommerce.aggregate([
-      {
-        $match: { store_url: storeUrl }
-      },
-      {
-        $lookup: {
-          from: 'woocommercecustomers',
-          localField: '_id',
-          foreignField: 'woo_commerce_id',
-          as: 'customers'
-        }
-      }
-    ])
-
-    wooCommerce = wooCommerce[0]
-
+    let wooCommerce = await WooCommerce.findOne({ store_url: storeUrl })
+      .populate({
+        path: 'customers',
+        model: 'WooCommerceCustomer',
+      })
+      .exec()
+      .catch(err => console.log(err.message))
     if (!wooCommerce) return res.status(404).json(errorHelper("00018", req));
 
     const { customers = [] } = wooCommerce;
@@ -54,27 +45,32 @@ export default async (req, res) => {
       woo_commerce_id: wooCommerce._id,
       country_code: "+91", // todo: different country code
     };
+
     const { error } = validateCustomer(customerObj);
     if (error) {
       let code = "00025";
+      console.log(error.details[0].message)
       return res.status(400).json(errorHelper(code, req, error.details[0].message));
     }
 
     try {
       const customer = await new Customer(customerObj).save();
+      wooCommerce.customers.push(customer._id)
+      wooCommerce.save()
+
       if (customer.mobile) {
         const member = new AddMemberService(customerObj);
         member.execute();
       }
 
-      logger("00105", customer._id, getText("en", "00105"), "Info", "", "Customer");
+      logger("00105", customer._id, getText("en", "00105"), "Info", req, "Customer");
       return res.status(200).json({
         resultMessage: { en: getText("en", "00105") },
         resultCode: "00105",
         customer,
       });
     } catch (err) {
-      logger("00104", "", getText("en", "00104"), "Error", "", "Customer");
+      logger("00104", "", getText("en", "00104"), "Error", req, "Customer");
       return res.status(400).json({
         resultMessage: { en: getText("en", "00104") },
         resultCode: "00104",

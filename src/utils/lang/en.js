@@ -104,6 +104,5 @@ export default {
   "00113": "OTP could not send.",
   "00114": "Customer already exists.",
   "00115": "The woo commerce customer updated successfully.",
-  "00116": "No customer found for the given criteria.",
-  "00117": "The woo commerce customer could not be updated.",
+  "00116": "The woo commerce customer could not be updated.",
 };

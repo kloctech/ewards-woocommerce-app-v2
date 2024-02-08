@@ -1,6 +1,7 @@
 import { Customer, WooCommerce } from "../../../models/index.js";
 import { errorHelper, getText, logger } from "../../../utils/index.js";
 import { validateCustomer } from "../../validators/customer.validator.js";
+import { AddMemberService } from "../../services/ewards/index.js";
 
 export default async (req, res) => {
   const body = req.body;
@@ -33,27 +34,36 @@ export default async (req, res) => {
       return res.status(400).json(errorHelper(code, req, error.details[0].message));
     }
 
+    const existingCustomer = await Customer.findOne({
+      woo_customer_id: body.id,
+      woo_commerce_id: wooCommerce._id
+    })
+
     const customer = await Customer.findOneAndUpdate({
       woo_customer_id: body.id,
       woo_commerce_id: wooCommerce._id
     }, customerObj, { returnDocument: 'after' }).catch(err => {
-      logger("00117", "", getText("en", "00117"), "Error", "", "Customer");
-      return res.status(500).json(errorHelper("00117", req, err.message));
+      logger("00116", "", getText("en", "00116"), "Error", req, "Customer");
+      return res.status(500).json(errorHelper("00116", req, err.message));
     })
 
     if (!customer) {
-      logger("00116", "", getText("en", "00116"), "Error", "", "Customer");
-      console.log("customer not found")
+      logger("00107", "", getText("en", "00107"), "Error", req, "Customer");
       return res.status(404).json({
-        resultMessage: { en: getText("en", "00116") },
-        resultCode: "00116",
+        resultMessage: { en: getText("en", "00107") },
+        resultCode: "00107",
       });
     }
 
-    logger("00115", customer._id, getText("en", "00115"), "Info", "", "Customer");
+    if (existingCustomer.mobile === "" && customer.mobile) {
+      const member = new AddMemberService(customerObj);
+      member.execute();
+    }
+
+    logger("00115", customer._id, getText("en", "00115"), "Info", req, "Customer");
     return res.status(200).json({
       resultMessage: { en: getText("en", "00115") },
-      resultCode: "00105",
+      resultCode: "00115",
       customer,
     });
   }
