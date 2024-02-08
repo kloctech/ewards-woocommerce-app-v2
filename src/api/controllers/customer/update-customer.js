@@ -37,7 +37,8 @@ export default async (req, res) => {
       woo_customer_id: body.id,
       woo_commerce_id: wooCommerce._id
     }, customerObj, { returnDocument: 'after' }).catch(err => {
-      return res.status(500).json(errorHelper(code, req, err.message));
+      logger("00117", "", getText("en", "00117"), "Error", "", "Customer");
+      return res.status(500).json(errorHelper("00117", req, err.message));
     })
 
     if (!customer) {
