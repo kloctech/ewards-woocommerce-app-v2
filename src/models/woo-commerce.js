@@ -28,7 +28,8 @@ const WooCommerceSchema = new Schema({
   is_installed:{
     type: Boolean,
     default: false
-  }
+  },
+  customers: [{ type: Schema.Types.ObjectId, ref: 'WooCommerceCustomer' }],
 },{timestamps: true});
 
 const WooCommerce = model('WooCommerce', WooCommerceSchema);

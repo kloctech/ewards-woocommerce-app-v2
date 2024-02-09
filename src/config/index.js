@@ -5,7 +5,7 @@ config();
 //NOTE: If you are running the project in an instance, you should store these secret keys in its configuration settings.
 // This type of storing secret information is only experimental and for the purpose of local running.
 
-const { MONGODB_URI, PORT, JWT_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, BUCKET_NAME, PRODUCTION_URL, EWARDS_API_URL } = process.env;
+const { MONGODB_URI, PORT, JWT_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, BUCKET_NAME, PRODUCTION_URL, EWARDS_API_URL,POINT_REDEEM_REQUEST,CREATE_WOOCOMMERCE_CODE } = process.env;
 
 export const port = PORT || 3001;
 export const jwtSecretKey = JWT_SECRET_KEY;
@@ -19,3 +19,5 @@ export const prefix = "/api";
 export const specs = "/docs";
 export const Production_URL = PRODUCTION_URL;
 export const ewardsApiUrl = EWARDS_API_URL;
+export const pointRedeemRequest = POINT_REDEEM_REQUEST;
+export const createCreateWoocommerceCode = CREATE_WOOCOMMERCE_CODE;
