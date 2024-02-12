@@ -6,10 +6,11 @@ import { logger, getText } from "../../../utils/index.js";
 import { AddMemberService } from "../ewards/index.js";
 
 export default class SyncCustomersService {
-  constructor(woo_commerce_id, url, consumerKey, consumerSecret) {
-    this.url = url;
-    this.consumerKey = consumerKey;
-    this.consumerSecret = consumerSecret;
+  constructor(wooCommerce) {
+    this.wooCommerce = wooCommerce;
+    this.url = wooCommerce.store_url;
+    this.consumerKey = wooCommerce.consumer_key;
+    this.consumerSecret = wooCommerce.consumer_secret;
     this.WooCommerce = new WooCommerceRestApi({
       url: this.url,
       consumerKey: this.consumerKey,
@@ -17,7 +18,7 @@ export default class SyncCustomersService {
       version: "wc/v3",
       queryStringAuth: true,
     });
-    this.wooCommerceId = woo_commerce_id;
+    this.wooCommerceId = wooCommerce._id;
   }
 
   async execute() {
@@ -65,10 +66,14 @@ export default class SyncCustomersService {
     let insertCustomer;
     try {
       insertCustomer = await Customer.insertMany(customerData);
+      for (const customer of insertCustomer) {
+        this.wooCommerce.customers.push(customer._id)
+      }
+      await this.wooCommerce.save()
       await this.#createCustomerToEwards(customers);
     } catch (err) {
       console.log(err);
-      logger("00026", this.wooCommerceId, getText("en", "00026"), "Info", "", "Customer");
+      logger("00026", this.wooCommerceId, getText("en", "00026"), "Error", "", "Customer");
     }
     return insertCustomer;
   }
