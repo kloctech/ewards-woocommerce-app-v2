@@ -17,6 +17,7 @@ const WooComCustomerSchema = new Schema(
     address: { type: String },
     city: { type: String },
     state: { type: String },
+    carts: [{ type: Schema.Types.ObjectId, ref: 'EwardsCart' }],
   },
   { timestamps: true }
 );
