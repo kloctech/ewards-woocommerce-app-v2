@@ -46,15 +46,16 @@ export default class CreateCouponService {
     const data = {
       code: couponCode,
       amount: this.billAmount,
-      usage_limit: this.usageLimit,
-      usage_limit_per_user: this.usageLimitPerUser,
+      usage_limit: this.couponDetails ? this.couponDetails.usageLimit : 1,
+      usage_limit_per_user: 1,
       minimum_amount: this.minimumAmount,
       email_restrictions: [this.email],
       date_expires: this.couponDetails ? this.couponDetails.token_valid : undefined,
+      usage_count: this.couponDetails ? this.couponDetails.actual_used : 0,
     };
 
     const response = await this.WooCommerce.post("coupons", data).catch((err) => {
-      console.log(err.response.data.message);
+      console.log(err.response.data.message, "11");
     });
 
     if (response) {
@@ -65,8 +66,16 @@ export default class CreateCouponService {
         woo_coupon_code: couponCode,
         ewards_coupon_code: this.couponDetails ? this.couponDetails.ewards_coupon_code : "",
         ewards_points: this.points,
+        use_limit: this.couponDetails?.use_limit,
+        actual_used: this.couponDetails?.actual_used,
+        token_valid: this.couponDetails ? this.couponDetails.token_valid : "",
+        name: this.couponDetails ? this.couponDetails.name : "",
+        location: this.couponDetails ? this.couponDetails.location : "",
+        valid_on: this.couponDetails ? this.couponDetails.valid_on : "",
+        timing: this.couponDetails ? this.couponDetails.timing : "",
+        terms: this.couponDetails ? this.couponDetails.terms : "",
       };
-
+      console.log(couponObj);
       const coupon = await Coupon.create(couponObj).catch((err) => {
         console.log(err);
         logger("00093", "", getText("en", "00017"), "Error", "", "Coupon");
