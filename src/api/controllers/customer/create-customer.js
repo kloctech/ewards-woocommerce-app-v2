@@ -14,23 +14,24 @@ export default async (req, res) => {
       .populate({
         path: 'customers',
         model: 'WooCommerceCustomer',
+        match: { email: body.email, woo_customer_id: body.id }
       })
       .exec()
       .catch(err => console.log(err.message))
+
     if (!wooCommerce) return res.status(404).json(errorHelper("00018", req));
 
     const { customers = [] } = wooCommerce;
-    const customerExists = customers.find(
-      (customer) =>
-        customer.email === body.email &&
-        customer.woo_customer_id === body.id &&
+    if (customers.length) {
+      const customerExists = customers.find((customer) =>
         customer.woo_commerce_id.valueOf() === wooCommerce._id.valueOf()
-    );
-    if (customerExists) {
-      return res.status(200).json({
-        resultMessage: { en: getText("en", "00114") },
-        resultCode: "00114"
-      });
+      );
+      if (customerExists) {
+        return res.status(200).json({
+          resultMessage: { en: getText("en", "00114") },
+          resultCode: "00114"
+        });
+      }
     }
 
     const customerObj = {
