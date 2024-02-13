@@ -3,7 +3,7 @@ import { errorHelper, logger, getText } from "../../../utils/index.js";
 
 export default async (req, res) => {
   const { id: ewardsKeyId } = req.params;
-  const { merchantId, wooCommerceId } = req;
+  const { merchant, wooCommerce } = req;
   const { customer_key, x_api_key, notes } = req.body
 
   let ewardsKey = await EwardsKey.findOne({ _id: ewardsKeyId }).catch(
@@ -22,8 +22,8 @@ export default async (req, res) => {
   );
 
   try {
-    ewardsKey.ewards_merchant_id = merchantId;
-    ewardsKey.woo_commerce_id = wooCommerceId;
+    ewardsKey.ewards_merchant_id = merchant._id;
+    ewardsKey.woo_commerce_id = wooCommerce._id;
     ewardsKey.customer_key = customer_key;
     ewardsKey.x_api_key = x_api_key;
     if (notes) ewardsKey.notes = notes;

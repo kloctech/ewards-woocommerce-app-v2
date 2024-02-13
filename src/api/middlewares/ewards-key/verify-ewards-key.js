@@ -11,13 +11,13 @@ export default async (req, res, next) => {
       .status(400)
       .json(errorHelper(code, req, error.details[0].message));
   }
-  const merchant = await EwardsMerchant.exists({
+  const merchant = await EwardsMerchant.findOne({
     merchant_id: merchant_id,
   }).catch((err) => {
     return res.status(500).json(errorHelper("00031", req, err.message));
   });
 
-  const wooCommerce = await WooCommerce.exists({
+  const wooCommerce = await WooCommerce.findOne({
     store_url: store_url,
   }).catch((err) => {
     return res.status(500).json(errorHelper("00031", req, err.message));
@@ -38,8 +38,8 @@ export default async (req, res, next) => {
     sendResponse(404, "00017")
   }
 
-  req.merchantId = merchant._id;
-  req.wooCommerceId = wooCommerce._id;
+  req.merchant = merchant;
+  req.wooCommerce = wooCommerce;
 
   next();
 };

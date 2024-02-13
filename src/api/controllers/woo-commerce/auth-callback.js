@@ -14,9 +14,8 @@ export default async (req, res) => {
   if (wooCommerce) {
     const webhookService = new RegisterWebhookService(wooCommerce);
     webhookService.execute();
-    let consumerKey = wooCommerce.consumer_key
-    let consumerSecret = wooCommerce.consumer_secret
-    const customers = new SyncCustomersService(wooCommerce._id, wooCommerce.store_url, consumerKey, consumerSecret)
+
+    const customers = new SyncCustomersService(wooCommerce)
     customers.execute();
   }
 

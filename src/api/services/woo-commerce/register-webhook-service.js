@@ -39,6 +39,7 @@ const webHooksArr = [
 
 export default class RegisterWebhookService {
   constructor(wooCommerce) {
+    this.wooCommerce = wooCommerce;
     this.store_url = wooCommerce.store_url;
     this.consumer_key = wooCommerce.consumer_key;
     this.consumer_secret = wooCommerce.consumer_secret;
@@ -86,6 +87,8 @@ export default class RegisterWebhookService {
       console.log(err);
       logger("00093", "", getText("en", "00093"), "Error", "", "WoocomWebhooks");
     });
+    this.wooCommerce.webhooks.push(webHook._id);
+    await this.wooCommerce.save();
     logger("00095", webHook._id, getText("en", "00095"), "Info", "", "WoocomWebhooks");
   }
 }
