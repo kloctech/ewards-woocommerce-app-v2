@@ -55,12 +55,10 @@ export default class CreateCouponService {
     };
 
     const response = await this.WooCommerce.post("coupons", data).catch((err) => {
-      console.log(err.response.data.message, "11");
+      console.log(err.response.data.message);
     });
 
     if (response) {
-      console.log(response.statusText);
-
       const couponObj = {
         ewards_cart_id: this.cartId,
         woo_coupon_code: couponCode,
@@ -75,12 +73,12 @@ export default class CreateCouponService {
         timing: this.couponDetails ? this.couponDetails.timing : "",
         terms: this.couponDetails ? this.couponDetails.terms : "",
       };
-      console.log(couponObj);
+
       const coupon = await Coupon.create(couponObj).catch((err) => {
-        console.log(err);
+        console.log(err.message);
         logger("00093", "", getText("en", "00017"), "Error", "", "Coupon");
       });
-      logger("00115", coupon._id, getText("en", "00118"), "Info", "", "coupon");
+      logger("00115", coupon._id, getText("en", "00118"), "Info", "", "Coupon");
       return coupon;
     }
   }

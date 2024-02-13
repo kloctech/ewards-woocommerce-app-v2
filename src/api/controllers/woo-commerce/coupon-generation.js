@@ -3,8 +3,8 @@ import { CreateCouponService } from "../../services/woo-commerce/index.js";
 export default async (req, res) => {
   const body = req.body;
 
-  const consumerKey = "ck_947602f0c79beb9da3b6e827767687451bec6a8a";
-  const consumerSecret = "cs_e999f4af83cfe1e8f607e007a2f44b1afa718115";
+  const consumerKey = "ck_07edaf5a66ee10a4f9874d1481fb92668e61ed7b";
+  const consumerSecret = "cs_7b44edf35a201dcfc5b64783e8baaa06fd1b108f";
   const storeUrl = "https://wordpress-698237-3804107.cloudwaysapps.com";
 
   try {

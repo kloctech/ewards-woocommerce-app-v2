@@ -8,7 +8,7 @@ const WooComCustomerSchema = new Schema(
     mobile: { type: String },
     email: { type: String, required: true },
     country_code: { type: String },
-    woo_customer_id: { type: Number, required: true, unique: true },
+    woo_customer_id: { type: Number, required: true },
     woo_commerce_id: {
       type: Schema.Types.ObjectId,
       required: true,
@@ -17,7 +17,7 @@ const WooComCustomerSchema = new Schema(
     address: { type: String },
     city: { type: String },
     state: { type: String },
-    carts: [{ type: Schema.Types.ObjectId, ref: 'EwardsCart' }],
+    carts: [{ type: Schema.Types.ObjectId, ref: "EwardsCart" }],
   },
   { timestamps: true }
 );
