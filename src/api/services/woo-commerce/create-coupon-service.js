@@ -5,24 +5,19 @@ import { Coupon } from "../../../models/index.js";
 import { logger, getText } from "../../../utils/index.js";
 
 export default class CreateCouponService {
-  constructor(consumerKey, consumerSecret, url, minimumAmount, email, usageLimit, usageLimitPerUser, billAmount, couponDetails, points, mobileNumber, cartId) {
-    this.consumerKey = consumerKey;
-    this.consumerSecret = consumerSecret;
-    this.url = url;
+  constructor(consumerKey, consumerSecret, url, minimumAmount, email, billAmount, couponDetails, points, mobileNumber, cartId) {
     this.billAmount = billAmount;
     this.couponDetails = couponDetails;
     this.points = points;
     this.mobileNumber = mobileNumber;
     this.cartId = cartId;
-    this.usageLimit = usageLimit;
     this.minimumAmount = minimumAmount;
     this.email = email;
-    this.usageLimitPerUser = usageLimitPerUser;
 
     this.WooCommerce = new WooCommerceRestApi({
-      url: this.url,
-      consumerKey: this.consumerKey,
-      consumerSecret: this.consumerSecret,
+      url: url,
+      consumerKey: consumerKey,
+      consumerSecret: consumerSecret,
       version: "wc/v3",
       queryStringAuth: true,
     });
