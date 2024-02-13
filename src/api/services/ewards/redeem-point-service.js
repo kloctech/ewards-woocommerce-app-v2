@@ -3,14 +3,15 @@ import { pointRedeemRequest } from "../../../config/index.js";
 import { CreateWoocommerceCode } from "./index.js"
 
 export default class RedeemPointService {
-    constructor(points,customer,billAmount,cartToken) {
+    constructor(points,customer,billAmount,cartToken,countryCode) {
         this.points = points
         this.customer = customer
         this.billAmount = billAmount
         this.cartToken = cartToken
         this.x_api_key = "HfktWlQUDB3fjqOPxzJEF7WRtdieeN8Q8c8RcCSR"
         this.merchant_id = "15441607" 
-        this.customer_key = "Shopify_test"
+        this.customer_key = "12345"
+        this.country_code = countryCode
     }
 
     async execute(){
@@ -18,13 +19,24 @@ export default class RedeemPointService {
             "Content-Type": "application/json",
             "x-api-key": this.x_api_key,
         }
-        const response = await axios.post(pointRedeemRequest,this.#body,{headers})
-        console.log(response);
-        const couponCode = await new CreateWoocommerceCode().execute()
+        const body =  {
+            "customer_key": this.customer_key,
+            "merchant_id": this.merchant_id,
+            "points": this.points,
+            "mobile": this.customer.mobile,
+            "country_code": "91",
+            "bill_amount": this.billAmount,
+            "cart_token": this.cartToken,
+        }
+
+        const response = await axios.post(pointRedeemRequest,body,{headers})
+        console.log(response.data);
+        return response.data
+        // const couponCode = await new CreateWoocommerceCode(consumerKey, consumerSecret, url, minimumAmount, email, usageLimit, usageLimitPerUser, billAmount, couponDetails, points, mobileNumber, cartId).execute()
     }
 
     async #body(){
-        return {
+        const body =  {
             "customer_key": this.customer_key,
             "merchant_id": this.merchant_id,
             "mobile": this.customer.mobile,
@@ -33,6 +45,8 @@ export default class RedeemPointService {
             "bill_amount": this.billAmount,
             "points": this.points
         }
+
+    return body
     }
 
 }
