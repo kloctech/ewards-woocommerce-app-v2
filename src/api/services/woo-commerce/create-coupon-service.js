@@ -46,13 +46,13 @@ export default class CreateCouponService {
     });
 
     if (response) {
-      const coupon = await this.storeCouponInDB(couponCode);
+      this.#saveCoupon(couponCode);
     }
 
     return response.data;
   }
 
-  async storeCouponInDB(couponCode) {
+  async #saveCoupon(couponCode) {
     const couponObj = {
       ewards_cart_id: this.cartId,
       woo_coupon_code: couponCode,
