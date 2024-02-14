@@ -1,42 +1,34 @@
 import pkg from "@woocommerce/woocommerce-rest-api";
-import crypto from "crypto";
 const WooCommerceRestApi = pkg.default;
 import { Coupon } from "../../../models/index.js";
 import { logger, getText } from "../../../utils/index.js";
+import { randomBytes } from "crypto";
 
 export default class CreateCouponService {
-  constructor(consumerKey, consumerSecret, url, minimumAmount, email, billAmount, couponDetails, points, mobileNumber, cartId) {
-    this.billAmount = billAmount;
-    this.couponDetails = couponDetails;
-    this.points = points;
-    this.mobileNumber = mobileNumber;
-    this.cartId = cartId;
-    this.minimumAmount = minimumAmount;
-    this.email = email;
+  constructor(wooCommerce, body, cart) {
+    this.billAmount = body.bill_amount;
+    this.couponDetails = body.coupon_details;
+    this.points = body.points;
+    this.mobileNumber = body.mobile_number;
+    this.cartId = cart._id;
+    this.minimumAmount = body.minimum_amount;
+    this.email = body.email;
 
     this.WooCommerce = new WooCommerceRestApi({
-      url: url,
-      consumerKey: consumerKey,
-      consumerSecret: consumerSecret,
+      url: wooCommerce.store_url,
+      consumerKey: wooCommerce.consumer_key,
+      consumerSecret: wooCommerce.consumer_secret,
       version: "wc/v3",
       queryStringAuth: true,
     });
   }
 
   async execute() {
-    return await this.#createCoupon();
+    return await this.createWooCommerceCoupon();
   }
 
-  async #generateCouponCode() {
-    const combinedString = `${this.mobileNumber}-${this.billAmount}`;
-    const hash = crypto.createHash("sha256").update(combinedString).digest("hex");
-    const couponCode = hash.substring(0, 9);
-
-    return couponCode;
-  }
-
-  async #createCoupon() {
-    const couponCode = await this.#generateCouponCode();
+  async createWooCommerceCoupon() {
+    const couponCode = `${this.mobileNumber}-${this.billAmount}-${randomBytes(2).toString("hex")}`;
 
     const data = {
       code: couponCode,
@@ -54,27 +46,33 @@ export default class CreateCouponService {
     });
 
     if (response) {
-      const couponObj = {
-        ewards_cart_id: this.cartId,
-        woo_coupon_code: couponCode,
-        ewards_coupon_code: this.couponDetails ? this.couponDetails.ewards_coupon_code : "",
-        ewards_points: this.points,
-        use_limit: this.couponDetails?.use_limit,
-        actual_used: this.couponDetails?.actual_used,
-        token_valid: this.couponDetails ? this.couponDetails.token_valid : "",
-        name: this.couponDetails ? this.couponDetails.name : "",
-        location: this.couponDetails ? this.couponDetails.location : "",
-        valid_on: this.couponDetails ? this.couponDetails.valid_on : "",
-        timing: this.couponDetails ? this.couponDetails.timing : "",
-        terms: this.couponDetails ? this.couponDetails.terms : "",
-      };
-
-      const coupon = await Coupon.create(couponObj).catch((err) => {
-        console.log(err.message);
-        logger("00093", "", getText("en", "00017"), "Error", "", "Coupon");
-      });
-      logger("00115", coupon._id, getText("en", "00118"), "Info", "", "Coupon");
-      return coupon;
+      const coupon = await this.storeCouponInDB(couponCode);
     }
+
+    return response.data;
+  }
+
+  async storeCouponInDB(couponCode) {
+    const couponObj = {
+      ewards_cart_id: this.cartId,
+      woo_coupon_code: couponCode,
+      ewards_coupon_code: this.couponDetails ? this.couponDetails.ewards_coupon_code : "",
+      ewards_points: this.points,
+      use_limit: this.couponDetails?.use_limit,
+      actual_used: this.couponDetails?.actual_used,
+      token_valid: this.couponDetails ? this.couponDetails.token_valid : "",
+      name: this.couponDetails ? this.couponDetails.name : "",
+      location: this.couponDetails ? this.couponDetails.location : "",
+      valid_on: this.couponDetails ? this.couponDetails.valid_on : "",
+      timing: this.couponDetails ? this.couponDetails.timing : "",
+      terms: this.couponDetails ? this.couponDetails.terms : "",
+    };
+
+    const coupon = await Coupon.create(couponObj).catch((err) => {
+      console.log(err.message);
+      logger("00093", "", getText("en", "00017"), "Error", "", "Coupon");
+    });
+
+    logger("00115", coupon._id, getText("en", "00118"), "Info", "", "Coupon");
   }
 }
