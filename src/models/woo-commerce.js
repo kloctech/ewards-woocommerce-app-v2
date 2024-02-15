@@ -29,7 +29,7 @@ const WooCommerceSchema = new Schema({
         type: Boolean,
         default: false
     },
-    ewards_key_id: { type: Schema.Types.ObjectId, ref: 'EwardsKey' },
+    ewards_key: { type: Schema.Types.ObjectId, ref: 'EwardsKey' },
     customers: [{ type: Schema.Types.ObjectId, ref: 'WooCommerceCustomer' }],
     orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }],
     webhooks: [{ type: Schema.Types.ObjectId, ref: 'WooCommerceWebhook' }]

@@ -5,7 +5,7 @@ import { Coupon } from "../../../models/index.js";
 import { logger, getText } from "../../../utils/index.js";
 
 export default class CreateCouponService {
-  constructor(consumerKey, consumerSecret, url, minimumAmount, email, billAmount, couponDetails, points, mobileNumber, cartId) {
+  constructor(wooCommerce, minimumAmount, email, billAmount, couponDetails, points, mobileNumber, cartId) {
     this.billAmount = billAmount;
     this.couponDetails = couponDetails;
     this.points = points;
@@ -13,26 +13,25 @@ export default class CreateCouponService {
     this.cartId = cartId;
     this.minimumAmount = minimumAmount;
     this.email = email;
-
     this.WooCommerce = new WooCommerceRestApi({
-      url: url,
-      consumerKey: consumerKey,
-      consumerSecret: consumerSecret,
+      url: wooCommerce.store_url,
+      consumerKey: wooCommerce.consumer_key,
+      consumerSecret: wooCommerce.consumer_secret,
       version: "wc/v3",
       queryStringAuth: true,
     });
   }
 
   async execute() {
-    return await this.#createCoupon();
+    const couponCode = await this.#createCoupon();
+    return couponCode
   }
 
   async #generateCouponCode() {
-    const combinedString = `${this.mobileNumber}-${this.billAmount}`;
-    const hash = crypto.createHash("sha256").update(combinedString).digest("hex");
-    const couponCode = hash.substring(0, 9);
+    const combinedString = `${this.mobileNumber}-${this.points}`;
+    const hash = crypto.randomBytes(2).toString('hex').toUpperCase()
 
-    return couponCode;
+    return combinedString+"-"+hash; //TODO 
   }
 
   async #createCoupon() {
@@ -40,7 +39,7 @@ export default class CreateCouponService {
 
     const data = {
       code: couponCode,
-      amount: this.billAmount,
+      amount: String(this.points),
       usage_limit: this.couponDetails ? this.couponDetails.usageLimit : 1,
       usage_limit_per_user: 1,
       minimum_amount: this.minimumAmount,
@@ -50,13 +49,16 @@ export default class CreateCouponService {
     };
 
     const response = await this.WooCommerce.post("coupons", data).catch((err) => {
-      console.log(err.response.data.message);
+      console.log("WooCommerce: "+err.response.data.message);
     });
+      await this.#saveCoupon(response.data)
+      return response.data.code;
+  }
 
-    if (response) {
+  async #saveCoupon(couponData){
       const couponObj = {
         ewards_cart_id: this.cartId,
-        woo_coupon_code: couponCode,
+        woo_coupon_code: couponData.code,
         ewards_coupon_code: this.couponDetails ? this.couponDetails.ewards_coupon_code : "",
         ewards_points: this.points,
         use_limit: this.couponDetails?.use_limit,
@@ -74,7 +76,5 @@ export default class CreateCouponService {
         logger("00093", "", getText("en", "00017"), "Error", "", "Coupon");
       });
       logger("00115", coupon._id, getText("en", "00118"), "Info", "", "Coupon");
-      return coupon;
-    }
   }
 }

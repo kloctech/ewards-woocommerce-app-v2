@@ -1,52 +1,56 @@
 import { errorHelper, logger, getText } from '../../../utils/index.js';
-import { EwardsKey, WooCommerce,Customer, Cart } from "../../../models/index.js";
-// import { pointRedeemRequest } from '../../../config/index.js';
-import { RedeemPointService } from '../../services/ewards/index.js';
-import {CreateCouponService} from '../../services/woo-commerce/index.js';
-// import { custom } from 'joi';
-
-//require('crypto').randomBytes(16).toString('hex');
-
-// Generate cart token and save against customer and save 
-// Create Point and Coupon request in woocommerce and save details of coupon
-//
+import { WooCommerce,Cart } from "../../../models/index.js";
+import crypto from "crypto";
+import { RedeemPointService,CaptureWoocommerceCode } from '../../services/ewards/index.js';
+import { CreateCouponService } from '../../services/woo-commerce/index.js';
 
 export default async (req, res) => {
 
-  let wooCommerce = await WooCommerce.findOne({ store_url: req.body.store_url })
+  const wooCommerce = await WooCommerce.findOne({ store_url: req.body.store_url })
   .populate('customers')
+  .populate({
+    path: 'ewards_key',
+    populate: {
+        path: 'ewards_merchant_id',
+        model: 'EwardsMerchant',
+        select: 'merchant_id'
+    }})
   .catch((err) => {
-    return res.status(500).json(errorHelper('00031', req, err.message));
+    return res.status(500).json(errorHelper('00008', req, err.message));
   });
 
-  if (!wooCommerce) return res.status(404).json(errorHelper('00089', req));
+  if (!wooCommerce) return res.status(404).json(errorHelper('00018', req));
 
-  let customer = wooCommerce.customers.find(customer => customer.mobile === req.body.mobile);
+  const customer = wooCommerce.customers.find(customer => customer.mobile === req.body.mobile);
 
-  let cartToken = "TESTTOEKN";
+  const ewardsKey = wooCommerce.ewards_key
+  const merchantId = ewardsKey.ewards_merchant_id.merchant_id
 
-  // let points = await new RedeemPointService(req.body.points,customer,req.body.bill_amount,cartToken,req.body.country_code).execute()
+  const cartToken = crypto.randomBytes(16).toString('hex')
 
-  let points = {response:
-    {points_value: '10', points_monetary_value: 5, redeem_id: false}}
+  const cartbody = {cart_token: cartToken,customer_id: customer.id}
 
+  const cart = new Cart(cartbody)
+  await cart.save().catch(err => {
+    // logger("00120", "", getText("en", "00105"), "Error", req, "Cart");
+    return res.status(500).json(errorHelper("00008", req, err.message));
+  })
 
-  let value = points.response.points_monetary_value
-    // let cart = await new Cart({
-    //   cart_token: cartToken,
-    //   customer_id: customer._id
-    // }).save()
+  console.log("Cart Token Created " + cart.cart_token);
 
-    let coupon =  new CreateCouponService(wooCommerce.consumer_key, wooCommerce.consumer_secret, wooCommerce.store_url, 1, customer.email, 1 , 1 , req.body.bill_amount, 1, value , req.body.mobile,"65c5069c232e8af9b7efa8cd")
-    await coupon.execute()
+  const points = await new RedeemPointService(req.body.points,customer,req.body.bill_amount,cartToken,req.body.country_code).execute()
 
-    // const member = new CreateCouponService(consumerKey, consumerSecret, storeUrl, body.minimum_amount, body.email_restrictions, body.usage_limit, body.usage_limit_per_user, body.bill_amount, body.coupon_details, body.points, body.mobile_number, body.cart_id);
+  console.log("Ewards: Redeem points api for " + points.response.points_monetary_value +" points value");
 
-    // const coupon = await member.execute();
+  const value = points.response.points_monetary_value
 
-  return res.status(200).json({
-    resultMessage: { en: getText('en', '00089'), tr: getText('tr', '00089') },
-    resultCode: '00089',
-    points: coupon
-  });
+  const couponCode = await new CreateCouponService(wooCommerce,req.body.minimum_bill,customer.email,req.body.bill_amount,null,String(value),req.body.mobile,cart._id).execute()
+
+  console.log("Woocommerce: Coupon Created "+ couponCode);
+
+  await new CaptureWoocommerceCode(ewardsKey,merchantId,points.response.points_value,null,customer,cartToken,couponCode).execute()
+
+  console.log("Ewards: woocommerce Coupon captured by ewards "+couponCode);
+
+  return res.status(200).json({woocommerce_coupon: couponCode});
 }

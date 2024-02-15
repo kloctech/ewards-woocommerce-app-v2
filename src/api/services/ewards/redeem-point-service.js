@@ -1,7 +1,5 @@
 import axios from "axios";
 import { pointRedeemRequest } from "../../../config/index.js";
-import { CreateWoocommerceCode } from "./index.js"
-
 export default class RedeemPointService {
     constructor(points,customer,billAmount,cartToken,countryCode) {
         this.points = points
@@ -24,13 +22,12 @@ export default class RedeemPointService {
             "merchant_id": this.merchant_id,
             "points": this.points,
             "mobile": this.customer.mobile,
-            "country_code": "91",
+            "country_code": this.customer.country_code,
             "bill_amount": this.billAmount,
             "cart_token": this.cartToken,
         }
 
         const response = await axios.post(pointRedeemRequest,body,{headers})
-        console.log(response.data);
         return response.data
         // const couponCode = await new CreateWoocommerceCode(consumerKey, consumerSecret, url, minimumAmount, email, usageLimit, usageLimitPerUser, billAmount, couponDetails, points, mobileNumber, cartId).execute()
     }
