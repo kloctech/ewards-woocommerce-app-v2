@@ -8,7 +8,7 @@ export default async (req, res) => {
   const storeUrl = "https://wordpress-698237-3804107.cloudwaysapps.com";
 
   try {
-    const member = new CreateCouponService(consumerKey, consumerSecret, storeUrl, body.minimum_amount, body.email_restrictions, body.usage_limit, body.usage_limit_per_user, body.bill_amount, body.coupon_details, body.points, body.mobile_number, body.cart_id);
+    const member = new CreateCouponService(wooCommerce, body, cardObj);
 
     const coupon = await member.execute();
     return res.status(200).json({ message: "Coupon created successfully", data: coupon });

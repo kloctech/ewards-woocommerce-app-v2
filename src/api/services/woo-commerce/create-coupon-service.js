@@ -1,28 +1,23 @@
 import pkg from "@woocommerce/woocommerce-rest-api";
-import crypto from "crypto";
+import { randomBytes } from 'crypto';
 const WooCommerceRestApi = pkg.default;
 import { Coupon } from "../../../models/index.js";
 import { logger, getText } from "../../../utils/index.js";
 
 export default class CreateCouponService {
-  constructor(consumerKey, consumerSecret, url, minimumAmount, email, usageLimit, usageLimitPerUser, billAmount, couponDetails, points, mobileNumber, cartId) {
-    this.consumerKey = consumerKey;
-    this.consumerSecret = consumerSecret;
-    this.url = url;
-    this.billAmount = billAmount;
-    this.couponDetails = couponDetails;
-    this.points = points;
-    this.mobileNumber = mobileNumber;
-    this.cartId = cartId;
-    this.usageLimit = usageLimit;
-    this.minimumAmount = minimumAmount;
-    this.email = email;
-    this.usageLimitPerUser = usageLimitPerUser;
-
+  constructor(wooCommerce, body, cart) {
+    this.cart = cart;
+    this.billAmount = body.bill_amount;
+    this.couponDetails = body.coupon_details;
+    this.points = body.points;
+    this.mobileNumber = body.mobile_number;
+    this.cartId = cart._id;
+    this.minimumAmount = body.minimum_amount;
+    this.email = body.email;
     this.WooCommerce = new WooCommerceRestApi({
-      url: this.url,
-      consumerKey: this.consumerKey,
-      consumerSecret: this.consumerSecret,
+      url: wooCommerce.store_url,
+      consumerKey: wooCommerce.consumer_key,
+      consumerSecret: wooCommerce.consumer_secret,
       version: "wc/v3",
       queryStringAuth: true,
     });
@@ -33,9 +28,10 @@ export default class CreateCouponService {
   }
 
   async #generateCouponCode() {
-    const combinedString = `${this.mobileNumber}-${this.billAmount}`;
-    const hash = crypto.createHash("sha256").update(combinedString).digest("hex");
-    const couponCode = hash.substring(0, 9);
+    const couponCode = `${this.mobileNumber}-${this.billAmount}-${randomBytes(2).toString('hex')}`;
+    // const hash = crypto.createHash("sha256").update(combinedString).digest("hex");
+    // const couponCode = randomBytes().toString('hex');
+    // const couponCode = hash.substring(0, 9);
 
     return couponCode;
   }
@@ -78,6 +74,8 @@ export default class CreateCouponService {
         console.log(err.message);
         logger("00093", "", getText("en", "00017"), "Error", "", "Coupon");
       });
+      this.cart.coupon_id = coupon._id;
+      await this.cart.save();
       logger("00115", coupon._id, getText("en", "00118"), "Info", "", "Coupon");
       return coupon;
     }
