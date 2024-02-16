@@ -8,6 +8,5 @@ router.post("/auth-callback", authCallback);
 router.post("/verify", verify);
 router.delete("/delete_store", deleteWooCommerce);
 router.get("/customers", getCustomers);
-router.post("/generate-coupon", generateCoupon);
 
 export default router;
