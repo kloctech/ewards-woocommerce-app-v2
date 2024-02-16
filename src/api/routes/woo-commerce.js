@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 
-import { authCallback, authReturn, verify, deleteWooCommerce, getCustomers, generateCoupon } from "../controllers/woo-commerce/index.js";
+import { authCallback, authReturn, verify, deleteWooCommerce, getCustomers } from "../controllers/woo-commerce/index.js";
 
 router.get("/auth-return", authReturn);
 router.post("/auth-callback", authCallback);
