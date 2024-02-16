@@ -109,5 +109,8 @@ export default {
   "00118": "The coupon data created successfully.",
   "00119": "The cart data created successfully.",
   "00120": "The cart data could not be created.",
-  "00121": "The coupon could not be redeemed."
+  "00121": "The coupon could not be redeemed.",
+  "00122": "The bill amount is less than minimum bill.",
+  "00123": "The points could not be redeemed.",
+  "00124": "The woo coupon code could not be captured by ewards."
 };

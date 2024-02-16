@@ -1,8 +1,8 @@
+import { errorHelper, logger, getText } from '../../../utils/index.js';
 import { WooCommerce, Cart } from "../../../models/index.js";
-import { errorHelper, getText, logger } from "../../../utils/index.js";
-import { randomBytes } from 'crypto';
-import { RedeemCouponService, CaptureWoocommerceCode } from "../../services/ewards/index.js"
-import { CreateCouponService } from "../../services/woo-commerce/index.js"
+import crypto from "crypto";
+import { RedeemPointService, CaptureWoocommerceCode } from '../../services/ewards/index.js';
+import { CreateCouponService } from '../../services/woo-commerce/index.js';
 
 export default async (req, res) => {
   let body = req.body;
@@ -15,6 +15,7 @@ export default async (req, res) => {
       populate: {
         path: 'ewards_merchant_id',
         model: 'EwardsMerchant',
+        select: 'merchant_id',
       }
     })
     .populate({
@@ -26,13 +27,12 @@ export default async (req, res) => {
       return res.status(500).json(errorHelper("00000", req, err.message));
     });
 
-  if (!wooCommerce) return res.status(404).json(errorHelper("00018", req));
+  if (!wooCommerce) return res.status(404).json(errorHelper('00018', req));
 
   const ewardsKey = wooCommerce.ewards_key_id;
   const merchantId = ewardsKey.ewards_merchant_id.merchant_id;
   if (!ewardsKey) return res.status(400).json(errorHelper("00015", req));
   if (!merchantId) return res.status(400).json(errorHelper("00110", req));
-
 
   const customers = wooCommerce.customers;
   const customer = customers.find((customer) =>
@@ -45,9 +45,10 @@ export default async (req, res) => {
     });
   }
 
-  const cartToken = randomBytes(16).toString('hex');
+  const cartToken = crypto.randomBytes(16).toString('hex')
+  const cartBody = { cart_token: cartToken, customer_id: customer.id }
 
-  let cart = new Cart({ cart_token: cartToken, customer_id: customer._id })
+  const cart = new Cart(cartBody)
   await cart.save().catch(err => {
     logger("00120", "", getText("en", "00120"), "Error", req, "Cart");
     return res.status(500).json(errorHelper("00120", req, err.message));
@@ -56,21 +57,19 @@ export default async (req, res) => {
 
   console.log("Cart Token Created " + cart.cart_token);
 
-  const coupon = await new RedeemCouponService(ewardsKey, merchantId, body, cartToken).execute()
+  const points = await new RedeemPointService(ewardsKey, merchantId, body, cartToken).execute()
 
-  if (coupon.status_code === 400) {
-    console.log('Ewards : Coupon could not be redeemed')
+  if (points.status_code === 400) {
+    console.log('Ewards : Points could not be redeemed')
     return res.status(400).json({
-      resultMessage: { en: coupon.response.message }
+      resultMessage: { en: points.response.message }
     });
   }
+  console.log("Ewards: Redeem points api for " + points.response.points_monetary_value + " points value");
 
-  console.log("Ewards: Redeem coupon api for " + coupon.response.discount_value + " discount value");
+  const value = points.response.points_monetary_value
 
-  const couponDetails = body.coupon_details;
-  couponDetails.discount_value = coupon.response.discount_value;
-
-  const couponCode = await new CreateCouponService(wooCommerce, body.minimum_bill, customer.email, body.bill_amount, couponDetails, null, body.mobile_number, cart).execute()
+  const couponCode = await new CreateCouponService(wooCommerce, body.minimum_bill, customer.email, body.bill_amount, null, String(value), body.mobile_number, cart).execute()
 
   if (!couponCode) {
     return res.status(400).json({
@@ -78,9 +77,10 @@ export default async (req, res) => {
       resultCode: "00117"
     });
   }
+
   console.log("Woocommerce: Coupon Created " + couponCode);
 
-  const captureCode = await new CaptureWoocommerceCode(ewardsKey, merchantId, null, coupon.response.coupon_code, customer, cartToken, couponCode).execute()
+  const captureCode = await new CaptureWoocommerceCode(ewardsKey, merchantId, points.response.points_value, null, customer, cartToken, couponCode).execute()
 
   if (captureCode.status_code === 400) {
     console.log('Ewards : Coupon code could not be captured by ewards')

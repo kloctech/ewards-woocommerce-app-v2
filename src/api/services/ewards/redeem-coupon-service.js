@@ -1,29 +1,41 @@
 import axios from "axios";
-import { couponRedemptionApiUrl } from "../../../config/index.js";
-import { errorHelper, getText, logger } from "../../../utils/index.js";
+import { couponRedeemRequest } from "../../../config/index.js";
+import { errorHelper } from "../../../utils/index.js";
 
 export default class RedeemCouponService {
   constructor(ewardsKey, merchantId, body, cartToken) {
-    this.reqHeaders = {
-      "x-api-key": ewardsKey.x_api_key,
-    };
-    this.requestBody = {
-      customer_key: ewardsKey.customer_key,
-      merchant_id: merchantId,
-      coupon_code: body.coupon_details.token_code,
-      mobile: body.mobile_number,
-      country_code: body.country_code,
-      bill_amount: body.bill_amount,
-      cart_token: cartToken
-    }
+    this.couponCode = body.coupon_details.token_code;
+    this.mobile = body.mobile_number;
+    this.billAmount = body.bill_amount;
+    this.cartToken = cartToken;
+    this.x_api_key = ewardsKey.x_api_key;
+    this.merchantId = merchantId;
+    this.customerKey = ewardsKey.customer_key;
+    this.countryCode = body.country_code;
   }
 
   async execute() {
-    return this.#redeemCoupon()
+    const headers = {
+      "Content-Type": "application/json",
+      "x-api-key": this.x_api_key,
+    }
+    const body = {
+      "customer_key": this.customerKey,
+      "merchant_id": this.merchantId,
+      "coupon_code": this.couponCode,
+      "mobile": this.mobile,
+      "country_code": this.countryCode,
+      "bill_amount": this.billAmount,
+      "cart_token": this.cartToken,
+    }
+
+    const response = await axios.post(couponRedeemRequest, body, { headers })
+    return response.data
   }
   async #redeemCoupon() {
-    const couponResponse = await axios.post(couponRedemptionApiUrl, this.requestBody, { headers: this.reqHeaders }).catch((err) => {
-      return errorHelper("00111", null, err.message);
+    const couponResponse = await axios.post(couponRedeemRequest, this.requestBody, { headers: this.reqHeaders }).catch((err) => {
+      console.log('Ewards :' + err.message)
+      return errorHelper("00121", null, err.message);
     });
     return couponResponse.data;
   }
