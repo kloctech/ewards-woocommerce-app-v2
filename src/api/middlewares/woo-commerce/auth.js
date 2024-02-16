@@ -1,0 +1,1 @@
+import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";``
