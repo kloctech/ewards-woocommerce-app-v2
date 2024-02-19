@@ -5,7 +5,6 @@ import { AddMemberService } from "../../services/ewards/index.js";
 
 export default async (req, res) => {
   const body = req.body;
-
   if (body.id) {
     const url = body._links.self[0].href || "";
     const storeUrl = url.substring(0, url.indexOf("/wp-json")) || url;
@@ -14,7 +13,7 @@ export default async (req, res) => {
       .populate({
         path: 'customers',
         model: 'WooCommerceCustomer',
-        match: { email: body.email, woo_customer_id: body.id }
+        match: { email: body.email, mobile: body.billing.phone, woo_customer_id: body.id }
       })
       .exec()
       .catch(err => console.log(err.message))
@@ -23,15 +22,10 @@ export default async (req, res) => {
 
     const { customers = [] } = wooCommerce;
     if (customers.length) {
-      const customerExists = customers.find((customer) =>
-        customer.woo_commerce_id.valueOf() === wooCommerce._id.valueOf()
-      );
-      if (customerExists) {
-        return res.status(200).json({
-          resultMessage: { en: getText("en", "00114") },
-          resultCode: "00114"
-        });
-      }
+      return res.status(200).json({
+        resultMessage: { en: getText("en", "00114") },
+        resultCode: "00114"
+      });
     }
 
     const customerObj = {

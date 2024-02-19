@@ -15,7 +15,7 @@ const CouponSchema = new Schema({
   timing: { type: String },
   valid_till: { type: Date },
   terms: { type: String },
-});
+}, { timestamps: true });
 
 const Coupon = model("Coupon", CouponSchema);
 

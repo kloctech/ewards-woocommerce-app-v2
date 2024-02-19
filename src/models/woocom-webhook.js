@@ -7,7 +7,7 @@ const wooComWebhookSchema = new Schema({
   status: { type: String, required: true },
   name: { type: String, required: true },
   woo_commerce_id: { type: Schema.Types.ObjectId, required: true, ref: 'WooCommerce' },
-});
+}, { timestamps: true });
 
 const WoocomWebhook = model("WooCommerceWebhook", wooComWebhookSchema);
 export default WoocomWebhook;

@@ -1,4 +1,4 @@
-import { WooCommerce, Cart } from "../../../models/index.js";
+import { WooCommerce, Cart, Customer } from "../../../models/index.js";
 import { errorHelper, getText, logger } from "../../../utils/index.js";
 import { randomBytes } from 'crypto';
 import { RedeemCouponService, CaptureWoocommerceCode } from "../../services/ewards/index.js"
@@ -34,10 +34,7 @@ export default async (req, res) => {
   if (!merchantId) return res.status(400).json(errorHelper("00110", req));
 
 
-  const customers = wooCommerce.customers;
-  const customer = customers.find((customer) =>
-    customer.woo_commerce_id.valueOf() === wooCommerce._id.valueOf()
-  );
+  let customer = wooCommerce.customers[0];
   if (!customer) {
     return res.status(400).json({
       resultMessage: { en: getText("en", "00107") },
@@ -46,15 +43,6 @@ export default async (req, res) => {
   }
 
   const cartToken = randomBytes(16).toString('hex');
-
-  let cart = new Cart({ cart_token: cartToken, customer_id: customer._id })
-  await cart.save().catch(err => {
-    logger("00120", "", getText("en", "00120"), "Error", req, "Cart");
-    return res.status(500).json(errorHelper("00120", req, err.message));
-  })
-  logger("00119", cart._id, getText("en", "00119"), "Info", req, "Cart");
-
-  console.log("Cart Token Created " + cart.cart_token);
 
   const coupon = await new RedeemCouponService(ewardsKey, merchantId, body, cartToken).execute()
 
@@ -69,6 +57,19 @@ export default async (req, res) => {
 
   const couponDetails = body.coupon_details;
   couponDetails.discount_value = coupon.response.discount_value;
+
+  let cart = new Cart({ cart_token: cartToken, customer_id: customer._id })
+  await cart.save().catch(err => {
+    logger("00120", "", getText("en", "00120"), "Error", req, "Cart");
+    return res.status(500).json(errorHelper("00120", req, err.message));
+  })
+
+  customer = await Customer.findOne({ _id: customer._id });
+  customer.carts.push(cart._id);
+  customer.save();
+  logger("00119", cart._id, getText("en", "00119"), "Info", req, "Cart");
+
+  console.log("Cart Token Created " + cart.cart_token);
 
   const couponCode = await new CreateCouponService(wooCommerce, body.minimum_bill, customer.email, body.bill_amount, couponDetails, null, body.mobile_number, cart).execute()
 

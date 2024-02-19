@@ -6,7 +6,7 @@ const EwardsCartSchema = new Schema({
   customer_id: { type: Schema.Types.ObjectId, ref: 'WooCommerceCustomer' },
   order_id: { type: Schema.Types.ObjectId, ref: 'Order' },
   coupon_id: { type: Schema.Types.ObjectId, ref: 'Coupon' },
-});
+}, { timestamps: true });
 
 const EwardsCart = model("EwardsCart", EwardsCartSchema);
 
