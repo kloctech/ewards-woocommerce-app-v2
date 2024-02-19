@@ -107,4 +107,12 @@ export default {
   "00116": "The woo commerce customer could not be updated.",
   "00117": "The coupon data could not be created.",
   "00118": "The coupon data created successfully.",
+  "00119": "The cart data created successfully.",
+  "00120": "The cart data could not be created.",
+  "00121": "The coupon could not be redeemed.",
+  "00122": "The bill amount is less than minimum bill.",
+  "00123": "The order data could not be created.",
+  "00124": "The order data created successfully.",
+  "00125": "The order data could not be updated.",
+  "00126": "The order data updated successfully.",
 };
