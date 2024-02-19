@@ -49,17 +49,17 @@ export default async (req, res) => {
       wooCommerce.orders.push(order._id);
       wooCommerce.save();
 
-      logger("00124", order._id, getText("en", "00124"), "Info", req, "Order");
+      logger("00126", order._id, getText("en", "00126"), "Info", req, "Order");
       return res.status(200).json({
-        resultMessage: { en: getText("en", "00124") },
-        resultCode: "00124",
+        resultMessage: { en: getText("en", "00126") },
+        resultCode: "00126",
         order,
       });
     } catch (err) {
-      logger("00123", "", getText("en", "00123"), "Error", req, "Order");
+      logger("00125", "", getText("en", "00125"), "Error", req, "Order");
       return res.status(400).json({
-        resultMessage: { en: getText("en", "00123") },
-        resultCode: "00123",
+        resultMessage: { en: getText("en", "00125") },
+        resultCode: "00125",
       });
     }
   }
