@@ -16,10 +16,6 @@ export default async (req, res) => {
         path: "customers",
         model: "WooCommerceCustomer",
         match: { woo_customer_id: customer_id },
-        populate: {
-          path: "carts",
-          model: "EwardsCart",
-        },
       })
       .exec()
       .catch((err) => console.log(err.message));
@@ -27,9 +23,6 @@ export default async (req, res) => {
     if (!wooCommerce) return res.status(404).json(errorHelper("00018", req));
 
     const coupon = await Coupon.findOne({ woo_coupon_code: couponCode });
-
-    wooCommerce.customers[0].carts.push(coupon.ewards_cart_id);
-    wooCommerce.customers[0].save();
 
     const orderObj = {
       woo_order_json: JSON.stringify(body),
