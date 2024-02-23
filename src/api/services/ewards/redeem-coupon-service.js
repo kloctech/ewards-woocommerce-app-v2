@@ -31,7 +31,7 @@ export default class RedeemCouponService {
 
     const response = await axios.post(couponRedeemRequest, body, { headers }).catch((err) => {
       console.log('Ewards :' + err.message)
-      return errorHelper("00123", null, err.message);
+      return errorHelper("00121", null, err.message);
     });
     return response.data
   }
