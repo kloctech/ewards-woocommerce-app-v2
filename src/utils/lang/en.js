@@ -112,5 +112,10 @@ export default {
   "00121": "The coupon could not be redeemed.",
   "00122": "The bill amount is less than minimum bill.",
   "00123": "The points could not be redeemed.",
-  "00124": "The woo coupon code could not be captured by ewards."
+  "00124": "The woo coupon code could not be captured by ewards.",
+  "00125": "The order data could not be created.",
+  "00126": "The order data created successfully.",
+  "00127": "The order data could not be updated.",
+  "00128": "The order data updated successfully.",
+  "00129": "Coupon not found."
 };

@@ -29,8 +29,8 @@ export default async (req, res) => {
   if (!wooCommerce) return res.status(404).json(errorHelper("00018", req));
 
   const ewardsKey = wooCommerce.ewards_key_id;
-  const merchantId = ewardsKey.ewards_merchant_id.merchant_id;
   if (!ewardsKey) return res.status(400).json(errorHelper("00015", req));
+  const merchantId = ewardsKey.ewards_merchant_id.merchant_id;
   if (!merchantId) return res.status(400).json(errorHelper("00110", req));
 
 

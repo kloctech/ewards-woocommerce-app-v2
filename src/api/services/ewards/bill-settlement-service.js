@@ -71,7 +71,9 @@ export default class BillSettlementService {
       }
     }
 
-    const response = await axios.post(billSettlementRequest, orderObj, { headers })
+    const response = await axios.post(billSettlementRequest, orderObj, { headers }).catch(err => {
+      console.log(err.response)
+    })
     return response.data
   }
 }
