@@ -31,7 +31,7 @@ export default class BillSettlementService {
         state: this.order.billing.state,
         tag: ''
       }, transaction: {
-        id: this.order.transaction_id,
+        id: this.order.id,
         number: this.order.number,
         type: this.order.payment_method,
         payment_type: this.order.payment_method_title,
