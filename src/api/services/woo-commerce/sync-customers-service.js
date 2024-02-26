@@ -3,7 +3,6 @@ const WooCommerceRestApi = pkg.default;
 import axios from "axios";
 import { Customer } from "../../../models/index.js";
 import { logger, getText } from "../../../utils/index.js";
-import { AddMemberService } from "../ewards/index.js";
 
 export default class SyncCustomersService {
   constructor(wooCommerce) {
@@ -70,22 +69,11 @@ export default class SyncCustomersService {
         this.wooCommerce.customers.push(customer._id)
       }
       await this.wooCommerce.save()
-      await this.#createCustomerToEwards(customers);
     } catch (err) {
       console.log(err);
       logger("00026", this.wooCommerceId, getText("en", "00026"), "Error", "", "Customer");
     }
     return insertCustomer;
-  }
-
-  async #createCustomerToEwards(customers) {
-    let customerData = this.#processCustomersData(customers);
-    for (let customer of customerData) {
-      if (customer.mobile) {
-        const member = new AddMemberService(customer);
-        member.execute();
-      }
-    }
   }
 
   #processCustomersData(customers) {
