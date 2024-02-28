@@ -1,6 +1,6 @@
 import { WooCommerce, Order, Coupon } from "../../../models/index.js";
 import { errorHelper, getText, logger } from "../../../utils/index.js";
-import { BillSettlementService } from '../../services/ewards/index.js'
+import { BillSettlementService, BillCancelService } from '../../services/ewards/index.js'
 
 export default async (req, res) => {
   const body = req.body;
@@ -42,13 +42,27 @@ export default async (req, res) => {
   if (body.status === 'processing') {
     const billSettlement = await new BillSettlementService(body, ewardsKey, merchantId, cartToken).execute();
 
-    if (!billSettlement.status_code === 400) {
+    if (billSettlement?.status_code === 400) {
       console.log('Ewards : Transaction details couldn\'t captured by eWards.')
       return res.status(400).json({
         resultMessage: { en: billSettlement.response.message }
       });
     }
-    console.log(`Ewards : Transaction details captured by eWards successfully`)
+    else if (billSettlement?.status_code === 200)
+      console.log(`Ewards : Transaction details captured by eWards successfully`)
+  }
+
+  if (body.status === 'cancelled') {
+    const billCancel = await new BillCancelService(body, ewardsKey, merchantId).execute();
+
+    if (billCancel?.errorCode === '400') {
+      console.log('Ewards : Transaction details couldn\'t captured by eWards.')
+      return res.status(400).json({
+        resultMessage: { en: billCancel.ReturnMessage }
+      });
+    }
+    else if (billCancel?.status_code === 200)
+      console.log(`Ewards : Transaction details captured by eWards successfully`)
   }
 
   const updatedOrder = {
