@@ -19,9 +19,14 @@ export default async (req, res, next) => {
 
   const wooCommerce = await WooCommerce.findOne({
     store_url: store_url,
-  }).catch((err) => {
-    return res.status(500).json(errorHelper("00031", req, err.message));
-  });
+  })
+    .populate({
+      path: 'customers',
+      model: 'WooCommerceCustomer'
+    })
+    .catch((err) => {
+      return res.status(500).json(errorHelper("00031", req, err.message));
+    });
 
   const sendResponse = (statusCode, errorCode) => {
     return res.status(statusCode).json({
