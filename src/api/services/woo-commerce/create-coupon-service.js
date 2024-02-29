@@ -1,5 +1,5 @@
 import pkg from "@woocommerce/woocommerce-rest-api";
-import { randomBytes } from 'crypto';
+import { randomBytes } from "crypto";
 const WooCommerceRestApi = pkg.default;
 import { Coupon } from "../../../models/index.js";
 import { logger, getText } from "../../../utils/index.js";
@@ -25,11 +25,11 @@ export default class CreateCouponService {
 
   async execute() {
     const couponCode = await this.#createCoupon();
-    return couponCode
+    return couponCode;
   }
 
   async #createCoupon() {
-    const couponCode = randomBytes(6).toString('hex').toUpperCase()
+    const couponCode = randomBytes(6).toString("hex").toUpperCase();
 
     const data = {
       code: couponCode,
@@ -45,7 +45,7 @@ export default class CreateCouponService {
     const response = await this.WooCommerce.post("coupons", data).catch((err) => {
       console.log("WooCommerce: " + err.response.data.message);
     });
-    this.#saveCoupon(response.data)
+    this.#saveCoupon(response.data);
     return response.data.code;
   }
 

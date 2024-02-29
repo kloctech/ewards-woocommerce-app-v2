@@ -7,8 +7,8 @@ import ewards from "./ewards.js";
 import ewardskey from "./ewards-key.js";
 import woocommerce from "./woo-commerce.js";
 import cart from "./cart.js";
-import customer from "./customer.js"
-import order from './order.js';
+import customer from "./customer.js";
+import order from "./order.js";
 
 const router = Router();
 
@@ -22,7 +22,7 @@ router.use("/ewards", ewards);
 router.use("/woo-commerce", woocommerce);
 router.use("/ewards-key", ewardskey);
 router.use("/cart", cart);
-router.use('/customer', customer)
-router.use('/order', order)
+router.use("/customer", customer);
+router.use("/order", order);
 
 export default router;
