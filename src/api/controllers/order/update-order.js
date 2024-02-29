@@ -42,7 +42,7 @@ export default async (req, res) => {
   if (body.status === 'processing') {
     const billSettlement = await new BillSettlementService(body, ewardsKey, merchantId, cartToken).execute();
 
-    if (!billSettlement.status_code === 400) {
+    if (billSettlement.status_code === 400) {
       console.log('Ewards : Transaction details couldn\'t captured by eWards.')
       return res.status(400).json({
         resultMessage: { en: billSettlement.response.message }

@@ -59,7 +59,7 @@ export default class BillSettlementService {
             taxable_amount: true
           }
         }),
-        taxes: [{ name: this.order.tax_lines[0]?.label, amount: this.order.total_tax }],
+        taxes: [{ name: this.order.tax_lines[0]?.label ?? '', amount: this.order.total_tax }],
         charges: [{ name: 'Shipping charges', amount: this.order.shipping_total }],
         channel: [{ name: "web" }],
         server: [],
