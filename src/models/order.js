@@ -6,7 +6,7 @@ const OrderSchema = new Schema({
   woo_order_id: { type: Number, required: true },
   gross_amount: { type: Number, required: true },
   net_amount: { type: Number, required: true },
-  order_date_created: { type: Date, default: Date.now },
+  order_date_created: { type: String, required: true },
   total_amount: { type: Number, required: true },
   woo_commerce_id: { type: Schema.Types.ObjectId, ref: 'WooCommerce' },
   discount_amount: { type: Number },

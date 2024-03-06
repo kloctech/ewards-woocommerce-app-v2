@@ -21,7 +21,7 @@ export default class BillSettlementService {
       customer: {
         name: `${this.order.billing.first_name} ${this.order.billing.last_name}`,
         mobile: this.order.billing.phone,
-        country_code: "91",
+        country_code: "+91",
         address: `${this.order.billing.address_1} ${this.order.billing.address_2}`,
         email: this.order.billing.email,
         gender: '',
@@ -32,27 +32,27 @@ export default class BillSettlementService {
         tag: ''
       }, transaction: {
         id: this.order.id,
-        number: this.order.number,
+        number: Number(this.order.number),
         type: this.order.payment_method,
         payment_type: this.order.payment_method_title,
-        gross_amount: `${Number(this.order.discount_total) + Number(this.order.total)}`,
-        net_amount: this.order.total,
-        amount: `${Number(this.order.discount_total) + Number(this.order.total) + Number(this.order.total_tax)}`,
+        gross_amount: `${Number(this.order.total) + Number(this.order.discount_total) - Number(this.order.total_tax)}`,
+        net_amount: `${Number(this.order.total) - Number(this.order.total_tax)}`,
         discount: this.order.discount_total,
-        order_time: this.order.date_created,
+        amount: `${Number(this.order.total)}`,
+        order_time: this.order.date_created.replace(/T/g, ' '),
         online_bill_source: '',
         items: this.order.line_items.map(item => {
           return {
             name: item.name,
             id: item.id,
-            rate: item.price,
+            rate: `${item.price}`,
             quantity: item.quantity,
-            subtotal: item.subtotal,
-            category: item.variation_id,
+            subtotal: Number(item.subtotal),
+            category: `${item.variation_id}`,
             bar_code: '',
             hsn_code: '',
-            cost_price: item.price,
-            marked_price: item.price,
+            cost_price: `${item.price}`,
+            marked_price: `${item.price}`,
             payment_mode: [],
             taxes: [{ name: item.tax_class, amount: item.total_tax }],
             charges: [],
@@ -72,8 +72,8 @@ export default class BillSettlementService {
     }
 
     const response = await axios.post(billSettlementRequest, orderObj, { headers }).catch(err => {
-      console.log(err.response)
+      console.log('Ewards : ', err.response.data)
     })
-    return response.data
+    return response?.data ?? null
   }
 }

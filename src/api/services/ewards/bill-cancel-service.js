@@ -20,12 +20,13 @@ export default class BillCancelService {
       order_id: `${this.order.id}`,
       mobile: this.order.billing.phone,
       country_code: "91",
-      purchase_date: this.order.date_created
+      purchase_date: this.order.date_created.replace(/T/g, ' ')
     }
 
-    const response = await axios.post(billCancelRequest, requestObj, { headers }).catch((err) => {
-      console.log('Ewards : ', err.response.data)
-    })
+    const response = await axios.post(billCancelRequest, requestObj, { headers })
+      .catch((err) => {
+        console.log('Ewards : ', err.response.data)
+      })
 
     return response?.data ?? null;
   }
