@@ -10,12 +10,20 @@ export default class BillSettlementService {
   }
 
   async execute() {
-
     const headers = {
       "Content-Type": "application/json",
       "x-api-key": this.ewardsKey.x_api_key,
     }
-    const orderObj = {
+    const orderObj = this.#getOrderData(this.order)
+
+    const response = await axios.post(billSettlementRequest, orderObj, { headers }).catch(err => {
+      console.log('Ewards : ', err.response.data)
+    })
+    return response?.data ?? null
+  }
+
+  #getOrderData(order) {
+    return {
       merchant_id: this.merchantId,
       customer_key: this.ewardsKey.customer_key,
       customer: {
@@ -41,24 +49,7 @@ export default class BillSettlementService {
         amount: `${Number(this.order.total)}`,
         order_time: this.order.date_created.replace(/T/g, ' '),
         online_bill_source: '',
-        items: this.order.line_items.map(item => {
-          return {
-            name: item.name,
-            id: item.id,
-            rate: `${item.price}`,
-            quantity: item.quantity,
-            subtotal: Number(item.subtotal),
-            category: `${item.variation_id}`,
-            bar_code: '',
-            hsn_code: '',
-            cost_price: `${item.price}`,
-            marked_price: `${item.price}`,
-            payment_mode: [],
-            taxes: [{ name: item.tax_class, amount: item.total_tax }],
-            charges: [],
-            taxable_amount: true
-          }
-        }),
+        items: this.#getCartItems(order.line_items),
         taxes: [{ name: this.order.tax_lines[0]?.label ?? '', amount: this.order.total_tax }],
         charges: [{ name: 'Shipping charges', amount: this.order.shipping_total }],
         channel: [{ name: "web" }],
@@ -70,10 +61,23 @@ export default class BillSettlementService {
         }
       }
     }
-
-    const response = await axios.post(billSettlementRequest, orderObj, { headers }).catch(err => {
-      console.log('Ewards : ', err.response.data)
-    })
-    return response?.data ?? null
+  }
+  #getCartItems(items) {
+    return items.map(item => ({
+      name: item.name,
+      id: item.id,
+      rate: `${item.price}`,
+      quantity: item.quantity,
+      subtotal: Number(item.subtotal),
+      category: `${item.variation_id}`,
+      bar_code: '',
+      hsn_code: '',
+      cost_price: `${item.price}`,
+      marked_price: `${item.price}`,
+      payment_mode: [],
+      taxes: [{ name: item.tax_class, amount: `${item.total_tax}` }],
+      charges: [],
+      taxable_amount: true
+    }));
   }
 }
