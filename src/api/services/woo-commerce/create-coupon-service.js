@@ -29,7 +29,7 @@ export default class CreateCouponService {
   }
 
   async #createCoupon() {
-    const couponCode = `${randomBytes(3).toString("hex")}-₹${this.couponDetails ? String(this.couponDetails.discount_value) : String(this.points)}-off`;
+    const couponCode = `${randomBytes(3).toString("hex")}-${this.couponDetails ? String(this.couponDetails.discount_value) : String(this.points)}rs-off`;
 
     const data = {
       code: couponCode,
