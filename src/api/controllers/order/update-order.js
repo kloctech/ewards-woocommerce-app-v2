@@ -1,6 +1,6 @@
 import { WooCommerce, Order, Coupon } from "../../../models/index.js";
 import { errorHelper, getText, logger } from "../../../utils/index.js";
-import { BillSettlementService } from '../../services/ewards/index.js'
+import { BillSettlementService, BillCancelService } from '../../services/ewards/index.js'
 
 export default async (req, res) => {
   const body = req.body;
@@ -25,8 +25,8 @@ export default async (req, res) => {
   if (!wooCommerce) return res.status(404).json(errorHelper("00018", req));
 
   const ewardsKey = wooCommerce.ewards_key_id;
-  const merchantId = ewardsKey.ewards_merchant_id.merchant_id;
   if (!ewardsKey) return res.status(404).json(errorHelper("00015", req));
+  const merchantId = ewardsKey.ewards_merchant_id.merchant_id;
   if (!merchantId) return res.status(404).json(errorHelper("00110", req));
 
   const couponCode = body.coupon_lines[0].code;
@@ -42,21 +42,26 @@ export default async (req, res) => {
   if (body.status === 'processing') {
     const billSettlement = await new BillSettlementService(body, ewardsKey, merchantId, cartToken).execute();
 
-    if (billSettlement.status_code === 400) {
-      console.log('Ewards : Transaction details couldn\'t captured by eWards.')
-      return res.status(400).json({
-        resultMessage: { en: billSettlement.response.message }
-      });
-    }
-    console.log(`Ewards : Transaction details captured by eWards successfully`)
+    if (billSettlement?.status_code === 200)
+      console.log(`Ewards : Transaction details captured by eWards successfully`)
+
+    else console.log('Ewards : Transaction details couldn\'t captured by eWards.')
+  }
+
+  if (body.status === 'cancelled') {
+    const billCancel = await new BillCancelService(body, ewardsKey, merchantId).execute();
+
+    if (billCancel?.errorCode === '200')
+      console.log(`Ewards : Transaction details captured by eWards successfully`)
+
+    else console.log('Ewards : Transaction details couldn\'t captured by eWards.')
   }
 
   const updatedOrder = {
-    gross_amount: Number(body.total) + Number(body.discount_total),
-    net_amount: body.total,
+    gross_amount: Number(body.total) + Number(body.discount_total) - Number(body.total_tax),
+    net_amount: Number(body.total) - Number(body.total_tax),
     discount_amount: body.discount_total,
-    total_amount: Number(body.total) + Number(body.discount_total) + Number(body.total_tax),
-    order_date_created: body.date_created,
+    total_amount: Number(body.total),
     payment_method_title: body.payment_method,
     order_cancelled: body.status === "cancelled",
   };
