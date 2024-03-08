@@ -13,7 +13,7 @@ export default async (req, res) => {
     let code = "00025";
     return res.status(400).json(errorHelper(code, req, error.details[0].message));
   }
-  if (body.store_url !== origin) return res.status(400).json(errorHelper("00106", req));
+  // if (body.store_url !== origin) return res.status(400).json(errorHelper("00106", req));
 
   const wooCommerce = await WooCommerce.findOne({ store_url: body.store_url })
     .populate({
