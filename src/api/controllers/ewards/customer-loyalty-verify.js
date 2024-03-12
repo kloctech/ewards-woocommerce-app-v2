@@ -6,14 +6,12 @@ import { validateCustomerInfoVerify } from "../../validators/customer.validator.
 
 export default async (req, res) => {
   const body = req.body;
-  const origin = req.headers.origin;
 
   const { error } = validateCustomerInfoVerify(body);
   if (error) {
     let code = "00025";
     return res.status(400).json(errorHelper(code, req, error.details[0].message));
   }
-  // if (body.store_url !== origin) return res.status(400).json(errorHelper("00106", req));
 
   const wooCommerce = await WooCommerce.findOne({ store_url: body.store_url })
     .populate({
@@ -36,8 +34,8 @@ export default async (req, res) => {
   if (!wooCommerce) return res.status(400).json(errorHelper("00018", req))
 
   const ewardsKey = wooCommerce.ewards_key_id;
-  const merchant = ewardsKey.ewards_merchant_id;
   if (!ewardsKey) return res.status(400).json(errorHelper("00015", req));
+  const merchant = ewardsKey.ewards_merchant_id;
   if (!merchant) return res.status(400).json(errorHelper("00110", req));
 
   const customers = wooCommerce.customers;
