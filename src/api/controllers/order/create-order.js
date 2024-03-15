@@ -8,9 +8,24 @@ export default async (req, res) => {
   const url = body._links.self[0].href || "";
   const storeUrl = url.substring(0, url.indexOf("/wp-json")) || url;
 
-  let wooCommerce = await WooCommerce.findOne({ store_url: storeUrl }).catch((err) => res.status(500).json(errorHelper("00000", req, err.message)));
+  let wooCommerce = await WooCommerce.findOne({ store_url: storeUrl })
+    .populate({
+      path: "orders",
+      model: "Order",
+      select: "woo_order_id",
+      match: { woo_order_id: body.id }
+    })
+    .catch((err) => res.status(500).json(errorHelper("00000", req, err.message)));
 
   if (!wooCommerce) return res.status(404).json(errorHelper("00018", req));
+
+  const { orders = [] } = wooCommerce;
+  if (orders.length) {
+    return res.status(200).json({
+      resultMessage: { en: getText("en", "00130") },
+      resultCode: "130"
+    });
+  }
 
   const couponCode = body.coupon_lines[0].code || '';
   const coupon = await Coupon.findOne({ woo_coupon_code: couponCode }, { ewards_cart_id: 1 })
