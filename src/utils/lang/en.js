@@ -117,5 +117,6 @@ export default {
   "00126": "The order data created successfully.",
   "00127": "The order data could not be updated.",
   "00128": "The order data updated successfully.",
-  "00129": "Coupon not found."
+  "00129": "Coupon not found.",
+  "00130": "Order already exists."
 };
