@@ -118,5 +118,7 @@ export default {
   "00127": "The order data could not be updated.",
   "00128": "The order data updated successfully.",
   "00129": "Coupon not found.",
-  "00130": "Order already exists."
+  "00130": "Order already exists.",
+  "00131": "Merchant Id could not be updated.",
+  "00132": "Merchant Id updated successfully."
 };

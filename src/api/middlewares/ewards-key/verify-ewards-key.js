@@ -4,7 +4,7 @@ import { validateEwardsKey } from "../../validators/ewards.key.validator.js";
 
 export default async (req, res, next) => {
   const { error } = validateEwardsKey(req.body);
-  const { merchant_id, store_url, customer_key, x_api_key, notes } = req.body
+  const { merchant_id, store_url } = req.body
   if (error) {
     let code = "00025";
     return res
