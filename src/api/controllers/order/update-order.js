@@ -4,7 +4,7 @@ import { BillSettlementService, BillCancelService } from '../../services/ewards/
 
 export default async (req, res) => {
   const body = req.body;
-  if (!body.id || !body.coupon_lines.length) return res.status(200).json('Order or Coupon data not found')
+  if (!body.id) return res.status(200).json('Order or Coupon data not found')
 
   const url = body._links?.self[0]?.href || "";
   const storeUrl = url.substring(0, url.indexOf("/wp-json")) || url;
@@ -29,7 +29,7 @@ export default async (req, res) => {
   const merchantId = ewardsKey.ewards_merchant_id.merchant_id;
   if (!merchantId) return res.status(404).json(errorHelper("00110", req));
 
-  const couponCode = body.coupon_lines[0].code;
+  const couponCode = body.coupon_lines[0]?.code || "";
   const coupon = await Coupon.findOne({ woo_coupon_code: couponCode }, { ewards_cart_id: 1 })
     .populate({
       path: "ewards_cart_id",
@@ -37,7 +37,7 @@ export default async (req, res) => {
       select: 'cart_token'
     }).catch((err) => res.status(500).json(errorHelper("00000", req, err.message)));
 
-  const cartToken = coupon?.ewards_cart_id?.cart_token;
+  const cartToken = coupon?.ewards_cart_id?.cart_token || "";
 
   if (body.status === 'processing') {
     const billSettlement = await new BillSettlementService(body, ewardsKey, merchantId, cartToken).execute();
@@ -58,10 +58,10 @@ export default async (req, res) => {
   }
 
   const updatedOrder = {
-    gross_amount: Number(body.total) + Number(body.discount_total) - Number(body.total_tax),
-    net_amount: Number(body.total) - Number(body.total_tax),
+    gross_amount: (Number(body.total) + Number(body.discount_total) - Number(body.total_tax)).toFixed(2),
+    net_amount: (Number(body.total) - Number(body.total_tax)).toFixed(2),
     discount_amount: body.discount_total,
-    total_amount: Number(body.total),
+    total_amount: Number(body.total).toFixed(2),
     payment_method_title: body.payment_method,
     order_cancelled: body.status === "cancelled",
   };

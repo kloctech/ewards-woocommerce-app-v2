@@ -43,10 +43,10 @@ export default class BillSettlementService {
         number: Number(this.order.number),
         type: this.order.payment_method,
         payment_type: this.order.payment_method_title,
-        gross_amount: `${Number(this.order.total) + Number(this.order.discount_total) - Number(this.order.total_tax)}`,
-        net_amount: `${Number(this.order.total) - Number(this.order.total_tax)}`,
+        gross_amount: `${(Number(this.order.total) + Number(this.order.discount_total) - Number(this.order.total_tax)).toFixed(2)}`,
+        net_amount: `${(Number(this.order.total) - Number(this.order.total_tax)).toFixed(2)}`,
         discount: this.order.discount_total,
-        amount: `${Number(this.order.total)}`,
+        amount: `${Number(this.order.total).toFixed(2)}`,
         order_time: this.order.date_created.replace(/T/g, ' '),
         online_bill_source: '',
         items: this.#getCartItems(order.line_items),
@@ -55,8 +55,8 @@ export default class BillSettlementService {
         channel: [{ name: "web" }],
         server: [],
         redemption: {
-          shopify_coupon_code: this.order.coupon_lines[0]?.code,
-          cart_token: this.cartToken,
+          shopify_coupon_code: this.order.coupon_lines[0]?.code || "",
+          cart_token: this.cartToken || "",
           checkout_token: this.order.cart_hash
         }
       }
