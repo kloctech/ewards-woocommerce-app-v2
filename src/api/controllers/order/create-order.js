@@ -3,7 +3,7 @@ import { errorHelper, getText, logger } from "../../../utils/index.js";
 
 export default async (req, res) => {
   const body = req.body;
-  if (!body.id || !body.coupon_lines.length) return res.status(200).json('Order or Coupon data not found')
+  if (!body.id) return res.status(200).json('Order data not found')
 
   const url = body._links.self[0].href || "";
   const storeUrl = url.substring(0, url.indexOf("/wp-json")) || url;
@@ -27,7 +27,7 @@ export default async (req, res) => {
     });
   }
 
-  const couponCode = body.coupon_lines[0].code || '';
+  const couponCode = body.coupon_lines[0]?.code || '';
   const coupon = await Coupon.findOne({ woo_coupon_code: couponCode }, { ewards_cart_id: 1 })
     .populate({
       path: "ewards_cart_id",
@@ -38,14 +38,14 @@ export default async (req, res) => {
   const orderObj = {
     woo_order_json: body,
     woo_order_id: body.id,
-    gross_amount: Number(body.total) + Number(body.discount_total) - Number(body.total_tax),
-    net_amount: Number(body.total) - Number(body.total_tax),
+    gross_amount: (Number(body.total) + Number(body.discount_total) - Number(body.total_tax)).toFixed(2),
+    net_amount: (Number(body.total) - Number(body.total_tax)).toFixed(2),
     discount_amount: body.discount_total,
     total_amount: Number(body.total),
     order_date_created: body.date_created.replace(/T/g, ' '),
     woo_commerce_id: wooCommerce._id,
     payment_method_title: body.payment_method,
-    ewards_cart_id: coupon?.ewards_cart_id._id,
+    ...(coupon && { ewards_cart_id: coupon.ewards_cart_id._id }),
   };
 
   try {
