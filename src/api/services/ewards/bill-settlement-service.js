@@ -50,7 +50,7 @@ export default class BillSettlementService {
         order_time: this.order.date_created.replace(/T/g, ' '),
         online_bill_source: '',
         items: this.#getCartItems(order.line_items),
-        taxes: [{ name: this.order.tax_lines[0]?.label ?? '', amount: this.order.total_tax }],
+        taxes: this.order.tax_lines.map(tax => ({ name: tax.label, amount: tax.tax_total })),
         charges: [{ name: 'Shipping charges', amount: this.order.shipping_total }],
         channel: [{ name: "web" }],
         server: [],
@@ -75,7 +75,7 @@ export default class BillSettlementService {
       cost_price: `${item.price}`,
       marked_price: `${item.price}`,
       payment_mode: [],
-      taxes: [{ name: item.tax_class, amount: `${item.total_tax}` }],
+      taxes: item.taxes.map((tax, index) => ({ name: this.order.tax_lines[index].label, amount: tax.total })),
       charges: [],
       taxable_amount: true
     }));
