@@ -40,6 +40,7 @@ export default class CreateCouponService {
       email_restrictions: [this.email],
       date_expires: this.couponDetails ? this.couponDetails.valid_till : undefined,
       usage_count: this.couponDetails ? this.couponDetails.actul_used : 0,
+      individual_use: true
     };
 
     const response = await this.WooCommerce.post("coupons", data).catch((err) => {
