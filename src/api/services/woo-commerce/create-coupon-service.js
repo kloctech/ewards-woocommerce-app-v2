@@ -37,7 +37,7 @@ export default class CreateCouponService {
       usage_limit: this.couponDetails ? this.couponDetails.use_limit : 1,
       usage_limit_per_user: 1,
       minimum_amount: this.minimumAmount,
-      email_restrictions: [this.email],
+      // email_restrictions: [this.email],
       date_expires: this.couponDetails ? this.couponDetails.valid_till : undefined,
       usage_count: this.couponDetails ? this.couponDetails.actul_used : 0,
       individual_use: true
