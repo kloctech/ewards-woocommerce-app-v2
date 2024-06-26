@@ -34,12 +34,11 @@ export default class CreateCouponService {
     const data = {
       code: couponCode,
       amount: this.couponDetails ? String(this.couponDetails.discount_value) : String(this.points),
-      usage_limit: this.couponDetails ? this.couponDetails.use_limit : 1,
-      usage_limit_per_user: 1,
+      usage_limit: 1,
       minimum_amount: this.minimumAmount,
       // email_restrictions: [this.email],
-      date_expires: this.couponDetails ? this.couponDetails.valid_till : undefined,
-      usage_count: this.couponDetails ? this.couponDetails.actul_used : 0,
+      date_expires: this.couponDetails?.valid_till || undefined,
+      usage_count: this.couponDetails?.actul_used || 0,
       individual_use: true
     };
 
@@ -56,14 +55,14 @@ export default class CreateCouponService {
       woo_coupon_code: couponData.code,
       ewards_coupon_code: this.couponDetails ? this.couponDetails.token_code : null,
       ewards_points: this.points,
-      use_limit: this.couponDetails?.use_limit,
+      use_limit: 1,
       actual_used: this.couponDetails?.actul_used,
       token_valid: this.couponDetails ? this.couponDetails.valid_till : "",
-      name: this.couponDetails ? this.couponDetails.name : "",
-      location: this.couponDetails ? this.couponDetails.location : "",
-      valid_on: this.couponDetails ? this.couponDetails.valid_on : "",
-      timing: this.couponDetails ? this.couponDetails.timing : "",
-      terms: this.couponDetails ? this.couponDetails.terms : "",
+      name: this.couponDetails?.name || "",
+      location: this.couponDetails?.location || "",
+      valid_on: this.couponDetails?.valid_on || "",
+      timing: this.couponDetails?.timing || "",
+      terms: this.couponDetails?.terms || "",
     };
 
     const coupon = await Coupon.create(couponObj).catch((err) => {

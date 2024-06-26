@@ -53,10 +53,10 @@ export default async (req, res) => {
     });
   }
 
-  console.log("Ewards: Redeem coupon api for " + coupon.response.discount_value + " discount value");
+  console.log("Ewards: Redeem coupon api for " + coupon.response.applicable_discount_amount + " discount value");
 
   const couponDetails = body.coupon_details;
-  couponDetails.discount_value = coupon.response.discount_value;
+  couponDetails.discount_value = coupon.response.applicable_discount_amount;
 
   let cart = new Cart({ cart_token: cartToken, customer_id: customer._id })
   await cart.save().catch(err => {
