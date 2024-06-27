@@ -39,8 +39,9 @@ export default async (req, res) => {
 
   const cartToken = coupon?.ewards_cart_id?.cart_token || "";
 
+  let billSettlement;
   if (body.status === 'processing') {
-    const billSettlement = await new BillSettlementService(body, ewardsKey, merchantId, cartToken).execute();
+    billSettlement = await new BillSettlementService(body, ewardsKey, merchantId, cartToken).execute();
 
     if (billSettlement?.status_code === 200)
       console.log(`Ewards : ${billSettlement.response.message}`)
@@ -64,6 +65,7 @@ export default async (req, res) => {
     total_amount: Number(body.total).toFixed(2),
     payment_method_title: body.payment_method,
     order_cancelled: body.status === "cancelled",
+    ...(billSettlement?.status_code === 200 && { bill_settled: true })
   };
 
   try {

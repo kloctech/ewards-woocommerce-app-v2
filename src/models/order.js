@@ -13,6 +13,7 @@ const OrderSchema = new Schema({
   payment_method_title: { type: String },
   ewards_cart_id: { type: Schema.Types.ObjectId, ref: 'EwardsCart' },
   order_cancelled: { type: Boolean, default: false },
+  bill_settled: { type: Boolean, default: false }
 }, { timestamps: true });
 
 const Order = model("Order", OrderSchema);

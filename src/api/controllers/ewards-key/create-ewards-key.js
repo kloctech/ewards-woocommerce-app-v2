@@ -1,6 +1,7 @@
 import { EwardsKey } from "../../../models/index.js";
 import { getText, logger } from "../../../utils/index.js";
-import { AddMemberService } from "../../services/ewards/index.js";
+import { AddMemberService, BillRepushService } from "../../services/ewards/index.js";
+import cron from 'node-cron'
 
 export default async (req, res) => {
   const { merchant, wooCommerce } = req;
@@ -21,6 +22,12 @@ export default async (req, res) => {
     customers
       .filter(customer => customer.mobile)
       .forEach(customer => new AddMemberService(customer).execute());
+
+    // running scheduler every at 10AM to repush the non-settled bills
+    cron.schedule('0 10 * * *', () => {
+      console.log('Scheduler running for bill-repush-service');
+      new BillRepushService().execute()
+    });
 
     logger('00021', ewards_key._id, getText('en', '00021'), 'Info', req, 'EwardsKey');
     return res.status(200).json({
