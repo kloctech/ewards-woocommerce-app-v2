@@ -8,7 +8,7 @@ export default class BillRepushService {
     const orders = await Order.find({ bill_settled: false })
       .catch((err) => console.log(err.message));
 
-    if (orders.length)
+    if (orders?.length)
       for (let order of orders) {
         const ewardsKey = await EwardsKey.findOne({ woo_commerce_id: order.woo_commerce_id })
           .populate({
@@ -16,12 +16,18 @@ export default class BillRepushService {
             model: 'EwardsMerchant',
             select: 'merchant_id'
           }).exec()
-          .catch((err) => res.status(500).json(errorHelper("00000", req, err.message)));
+          .catch((err) => console.log(err.message));
 
-        if (!ewardsKey) return res.status(404).json(errorHelper("00015", req));
+        if (!ewardsKey) {
+          console.log(errorHelper("00015"));
+          continue; // Skip to the next iteration if ewardsKey is not found
+        }
 
-        const merchantId = ewardsKey.ewards_merchant_id.merchant_id;
-        if (!merchantId) return res.status(404).json(errorHelper("00110", req));
+        const merchantId = ewardsKey.ewards_merchant_id?.merchant_id;
+        if (!merchantId) {
+          console.log(errorHelper("00110"));
+          continue; // Skip to the next iteration if merchantId is not found
+        }
 
         const couponCode = order.woo_order_json.coupon_lines[0]?.code || "";
         const coupon = await Coupon.findOne({ woo_coupon_code: couponCode }, { ewards_cart_id: 1 })
@@ -29,7 +35,7 @@ export default class BillRepushService {
             path: "ewards_cart_id",
             model: "EwardsCart",
             select: 'cart_token'
-          }).catch((err) => res.status(500).json(errorHelper("00000", req, err.message)));
+          }).catch((err) => console.log(err.message));
 
         const cartToken = coupon?.ewards_cart_id?.cart_token || "";
 
