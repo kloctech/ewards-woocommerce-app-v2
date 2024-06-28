@@ -24,9 +24,12 @@ export default async (req, res) => {
       .forEach(customer => new AddMemberService(customer).execute());
 
     // running scheduler every at 10AM to repush the non-settled bills
-    cron.schedule('0 10 * * *', () => {
+    cron.schedule('40 10 * * *', () => {
       console.log('Scheduler running for bill-repush-service');
       new BillRepushService().execute()
+    }, {
+      scheduled: true,
+      timezone: "Asia/Kolkata"
     });
 
     logger('00021', ewards_key._id, getText('en', '00021'), 'Info', req, 'EwardsKey');
