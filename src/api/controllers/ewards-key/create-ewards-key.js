@@ -29,12 +29,26 @@ export default async (req, res) => {
       ewards_key
     });
   } catch (err) {
-    console.log(err.response)
-    logger('00096', '', getText('en', '00096'), 'Error', req, 'EwardsKey');
-    return res.status(500).json({
-      resultMessage: { en: getText('en', '00096') },
-      resultCode: '00096'
-    });
+    console.log('Error : ' + err.message)
+    if (err.name === 'ValidationError') {
+      const firstErrorField = Object.keys(err.errors)[0];
+      const errorDetail = err.errors[firstErrorField];
+
+      // Accessing `kind` and `path`
+      const kind = errorDetail.kind;
+      const path = errorDetail.path;
+
+      const errorMessage = kind === 'unique' && `${path} must be unique, entered value has already been used in different store.`;
+
+      logger('00096', '', errorMessage, 'Error', req, "EwardsKey");
+      return res.status(500).json({
+        resultMessage: { en: errorMessage },
+        resultCode: '00096'
+      });
+    } else {
+      logger('00096', '', getText('en', '00096'), 'Error', req, "EwardsKey");
+      return res.status(500).json(errorHelper('00096', req, err.message));
+    }
   }
 };
 
