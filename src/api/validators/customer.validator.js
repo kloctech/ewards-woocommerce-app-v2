@@ -2,8 +2,8 @@ import Joi from "joi";
 
 export function validateCustomer(body) {
   const schema = Joi.object({
-    first_name: Joi.string().required(),
-    last_name: Joi.string().required(),
+    first_name: Joi.string().required().allow(""),
+    last_name: Joi.string().required().allow(""),
     mobile: Joi.string().allow(""),
     email: Joi.string().required(),
     woo_customer_id: Joi.number().required(),

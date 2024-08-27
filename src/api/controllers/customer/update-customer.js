@@ -17,8 +17,8 @@ export default async (req, res) => {
     if (!wooCommerce) return res.status(404).json(errorHelper("00018", req));
 
     const customerObj = {
-      first_name: body.first_name,
-      last_name: body.last_name,
+      first_name: body.first_name || "",
+      last_name: body.last_name || "",
       mobile: body.billing.phone.slice(-10),
       address: `${body.billing.address_1} - ${body.billing.address_2}`,
       city: body.billing.city,

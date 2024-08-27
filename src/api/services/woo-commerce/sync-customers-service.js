@@ -80,8 +80,8 @@ export default class SyncCustomersService {
     const customersData = [];
     customers.map((customer) => {
       customersData.push({
-        first_name: customer.first_name,
-        last_name: customer.last_name,
+        first_name: customer.first_name || "",
+        last_name: customer.last_name || "",
         mobile: customer.billing.phone.slice(-10),
         email: customer.email,
         woo_customer_id: customer.id,

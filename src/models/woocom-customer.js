@@ -3,8 +3,8 @@ const { Schema, model } = mongoose;
 
 const WooComCustomerSchema = new Schema(
   {
-    first_name: { type: String, required: true },
-    last_name: { type: String, required: true },
+    first_name: { type: String, },
+    last_name: { type: String, },
     mobile: { type: String },
     email: { type: String, required: true },
     country_code: { type: String },
