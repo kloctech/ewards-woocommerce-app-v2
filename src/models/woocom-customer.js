@@ -22,5 +22,11 @@ const WooComCustomerSchema = new Schema(
   { timestamps: true }
 );
 
+// Creating a compound unique index
+WooComCustomerSchema.index(
+  { woo_customer_id: 1, woo_commerce_id: 1 },
+  { unique: true }
+);
+
 const WooComCustomer = model("WooCommerceCustomer", WooComCustomerSchema);
 export default WooComCustomer;

@@ -5,6 +5,8 @@ import { AddMemberService } from "../../services/ewards/index.js";
 
 export default async (req, res) => {
   const body = req.body;
+  if (!body.id) return res.status(200).json('Customer data not found')
+
   if (body.id) {
     const url = body._links.self[0].href || "";
     const storeUrl = url.substring(0, url.indexOf("/wp-json")) || url;
@@ -31,7 +33,7 @@ export default async (req, res) => {
     const customerObj = {
       first_name: body.first_name,
       last_name: body.last_name,
-      mobile: body.billing.phone,
+      mobile: body.billing.phone.slice(-10),
       address: `${body.billing.address_1} - ${body.billing.address_2}`,
       city: body.billing.city,
       email: body.email,
@@ -62,9 +64,9 @@ export default async (req, res) => {
       return res.status(200).json({
         resultMessage: { en: getText("en", "00105") },
         resultCode: "00105",
-        customer,
       });
     } catch (err) {
+      console.log(err.message)
       logger("00104", "", getText("en", "00104"), "Error", req, "Customer");
       return res.status(400).json({
         resultMessage: { en: getText("en", "00104") },
