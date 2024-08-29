@@ -18,9 +18,7 @@ export default async (req, res) => {
     merchant.ewards_keys.push(ewards_key._id);
     merchant.save();
 
-    customers
-      .filter(customer => customer.mobile)
-      .forEach(customer => new AddMemberService(customer).execute());
+    new AddMemberService(customers).execute()
 
     logger('00021', ewards_key._id, getText('en', '00021'), 'Info', req, 'EwardsKey');
     return res.status(200).json({

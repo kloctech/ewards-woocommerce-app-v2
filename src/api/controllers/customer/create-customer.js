@@ -55,10 +55,7 @@ export default async (req, res) => {
       wooCommerce.customers.push(customer._id)
       wooCommerce.save()
 
-      if (customer.mobile) {
-        const member = new AddMemberService(customerObj);
-        member.execute();
-      }
+      new AddMemberService([customerObj]).execute();
 
       logger("00105", customer._id, getText("en", "00105"), "Info", req, "Customer");
       return res.status(200).json({

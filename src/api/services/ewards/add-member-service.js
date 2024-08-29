@@ -3,48 +3,69 @@ import { EwardsKey, WooCommerce, EwardsMerchant } from "../../../models/index.js
 import { ewardsAddMemberApiUrl } from "../../../config/index.js";
 
 export default class AddMemberService {
-  constructor(customer_data) {
-    this.customer = {
-      first_name: customer_data.first_name,
-      last_name: customer_data.last_name || "",
-      mobile: customer_data.mobile,
-      email: customer_data.email,
-      country_code: customer_data.country_code,
-      // address:customer_data.address,
-      // city:customer_data.city,
-      // state: customer_data.state
-    };
-    this.woo_commerce_id = customer_data.woo_commerce_id;
+  constructor(customers_data) {
+    this.customers_data = customers_data;
   }
 
   async execute() {
-    await this.#getEwardsMerchantId();
+    if (this.customers_data.length > 0) {
+      await this.#getWooCommerce(this.customers_data[0]?.woo_commerce_id);
+
+      for (const customer of this.customers_data) {
+        if (!customer.mobile) continue;
+        this.customer = {
+          first_name: customer.first_name,
+          last_name: customer.last_name || "",
+          mobile: customer.mobile,
+          email: customer.email,
+          country_code: customer.country_code,
+          // address:customer.address,
+          // city:customer.city,
+          // state: customer.state
+        };
+        // this.woo_commerce_id = customer.woo_commerce_id;
+        await this.#addCustomerToEwards();
+      }
+    }
+
   }
 
-  async #getEwardsMerchantId() {
-    const wooCommerce = await WooCommerce.findOne({ _id: this.woo_commerce_id }).catch((err) => console.log(err));
-    if (wooCommerce) {
-      this.ewards_merchant_id = wooCommerce.ewards_merchant_id;
+  async #getWooCommerce(wooCommerceId) {
+    try {
+      const wooCommerce = await WooCommerce.findOne({ _id: wooCommerceId })
+      if (wooCommerce) {
+        this.ewards_merchant_id = wooCommerce.ewards_merchant_id;
+      }
+      await this.#getMerchantId();
+      await this.#getEwardsKey(wooCommerceId);
+    } catch (error) {
+      console.log(error.message)
     }
-    await this.#getMerchantId();
-    await this.#getEwardsKey();
-    await this.#addCustomerToEwards();
   }
 
   async #getMerchantId() {
-    const ewardsMerchant = await EwardsMerchant.findOne({ _id: this.ewards_merchant_id }).catch((err) => console.log(err));
-    if (ewardsMerchant) {
-      this.merchant_id = ewardsMerchant.merchant_id;
+    try {
+      const ewardsMerchant = await EwardsMerchant.findOne({ _id: this.ewards_merchant_id });
+      if (ewardsMerchant) {
+        this.merchant_id = ewardsMerchant.merchant_id;
+      }
+    } catch (error) {
+      console.log("Error while getting ewards merchant id : ", error.message);
     }
+
   }
 
-  async #getEwardsKey() {
-    const ewardsKey = await EwardsKey.findOne({ woo_commerce_id: this.woo_commerce_id }).catch((err) => console.log(err));
-
-    if (ewardsKey) {
-      this.customer_key = ewardsKey.customer_key;
-      this.x_api_key = ewardsKey.x_api_key;
+  async #getEwardsKey(wooCommerceId) {
+    try {
+      const ewardsKey = await EwardsKey.findOne({ woo_commerce_id: wooCommerceId })
+      if (ewardsKey) {
+        this.customer_key = ewardsKey.customer_key;
+        this.x_api_key = ewardsKey.x_api_key;
+      }
+    } catch (error) {
+      console.log("Error while getting EwardsKeys : ", error.message);
     }
+
   }
 
   async #addCustomerToEwards() {
