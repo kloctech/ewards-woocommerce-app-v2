@@ -35,6 +35,11 @@ export default class SyncCustomersService {
     let nextUrlSubscribers = await this.#getNextPageUrl(subscriberResponse.headers.link, "subscriber");
     await this.#fetchCustomers(nextUrlCustomers);
     await this.#fetchCustomers(nextUrlSubscribers);
+
+    // Updating is_customers_synced to true after syncing all customers
+    this.wooCommerce.is_customers_synced = true;
+    await this.wooCommerce.save().catch((err) => { console.log(err.message) });
+    console.log("Customers synced successfully")
   }
 
   async #fetchCustomers(nextPageUrl) {
