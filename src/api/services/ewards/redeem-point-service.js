@@ -6,7 +6,7 @@ export default class RedeemPointService {
     constructor(ewardsKey, merchantId, body, cartToken) {
         this.points = body.points;
         this.mobile = body.mobile_number;
-        this.billAmount = body.bill_amount;
+        this.billAmount = body.bill_amount.replace(/,/g, '');
         this.cartToken = cartToken;
         this.x_api_key = ewardsKey.x_api_key;
         this.merchantId = merchantId;
