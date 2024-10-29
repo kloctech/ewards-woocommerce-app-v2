@@ -28,7 +28,7 @@ export default class RedeemPointService {
             "bill_amount": this.billAmount,
             "cart_token": this.cartToken,
         }
-
+        console.log('redeem points api payload : ' + body)
         const response = await axios.post(pointRedeemRequest, body, { headers }).catch((err) => {
             console.log('Ewards :' + err.message)
             return errorHelper("00123", null, err.message);
